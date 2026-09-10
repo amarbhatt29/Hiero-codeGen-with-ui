@@ -1,86 +1,113 @@
 package com.hiero.design.core.models;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
+import org.apache.sling.models.annotations.DefaultInjectionStrategy;
+import org.apache.sling.models.annotations.Model;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
+@Model(
+    adaptables = Resource.class,
+    defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL
+)
 public class HeroCarouselSlide {
 
-    private static final String PN_HEADING = "heading";
-    private static final String PN_DESCRIPTION = "description";
-    private static final String PN_RATE = "rateText";
-    private static final String PN_CTA_LABEL = "ctaLabel";
-    private static final String PN_CTA_LINK = "ctaLink";
-    private static final String PN_LEGAL = "legalText";
-    private static final String PN_DESKTOP_IMAGE = "desktopImage";
-    private static final String PN_MOBILE_IMAGE = "mobileImage";
-    private static final String PN_VIDEO = "video";
-    private static final String PN_VIDEO_POSTER = "videoPoster";
-    private static final String PN_ALT_TEXT = "altText";
+    @ValueMapValue
+    private String desktopImage;
 
-    private Resource resource;
-    private ValueMap valueMap;
+    @ValueMapValue
+    private String mobileImage;
 
-    public HeroCarouselSlide(Resource resource) {
-        this.resource = resource;
-        this.valueMap = resource.getValueMap();
-    }
+    @ValueMapValue
+    private String desktopVideo;
 
-    public String getHeading() {
-        return valueMap.get(PN_HEADING, String.class);
-    }
+    @ValueMapValue
+    private String mobileVideo;
 
-    public String getDescription() {
-        return valueMap.get(PN_DESCRIPTION, String.class);
-    }
+    @ValueMapValue
+    private String heading;
 
-    public String getRateText() {
-        return valueMap.get(PN_RATE, String.class);
-    }
+    @ValueMapValue
+    private String description;
 
-    public String getCtaLabel() {
-        return valueMap.get(PN_CTA_LABEL, String.class);
-    }
+    @ValueMapValue
+    private String rateHighlight;
 
-    public String getCtaLink() {
-        return valueMap.get(PN_CTA_LINK, String.class);
-    }
+    @ValueMapValue
+    private String ctaLabel;
 
-    public String getLegalText() {
-        return valueMap.get(PN_LEGAL, String.class);
-    }
+    @ValueMapValue
+    private String ctaLink;
+
+    @ValueMapValue
+    private String ctaTarget;
+
+    @ValueMapValue
+    private String legalCopy;
+
+    @ValueMapValue
+    private String slideOrder;
 
     public String getDesktopImage() {
-        return valueMap.get(PN_DESKTOP_IMAGE, String.class);
+        return desktopImage;
     }
 
     public String getMobileImage() {
-        return valueMap.get(PN_MOBILE_IMAGE, String.class);
+        return mobileImage;
     }
 
-    public String getVideo() {
-        return valueMap.get(PN_VIDEO, String.class);
+    public String getDesktopVideo() {
+        return desktopVideo;
     }
 
-    public String getVideoPoster() {
-        return valueMap.get(PN_VIDEO_POSTER, String.class);
+    public String getMobileVideo() {
+        return mobileVideo;
     }
 
-    public String getAltText() {
-        return valueMap.get(PN_ALT_TEXT, String.class);
+    public String getHeading() {
+        return heading;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getRateHighlight() {
+        return rateHighlight;
+    }
+
+    public String getCtaLabel() {
+        return ctaLabel;
+    }
+
+    public String getCtaLink() {
+        return ctaLink;
+    }
+
+    public String getCtaTarget() {
+        return ctaTarget;
+    }
+
+    public String getLegalCopy() {
+        return legalCopy;
+    }
+
+    public String getSlideOrder() {
+        return slideOrder;
     }
 
     public boolean hasVideo() {
-        String video = getVideo();
-        return video != null && !video.isEmpty();
+        return (desktopVideo != null && !desktopVideo.isEmpty()) ||
+               (mobileVideo != null && !mobileVideo.isEmpty());
     }
 
-    public boolean hasMobileImage() {
-        String mobileImage = getMobileImage();
-        return mobileImage != null && !mobileImage.isEmpty();
+    public boolean hasImage() {
+        return (desktopImage != null && !desktopImage.isEmpty()) ||
+               (mobileImage != null && !mobileImage.isEmpty());
     }
 
-    public String getEffectiveImage() {
-        String desktopImage = getDesktopImage();
-        return desktopImage != null ? desktopImage : "";
+    public boolean hasContent() {
+        return (heading != null && !heading.isEmpty()) ||
+               (description != null && !description.isEmpty()) ||
+               (ctaLabel != null && !ctaLabel.isEmpty());
     }
 }

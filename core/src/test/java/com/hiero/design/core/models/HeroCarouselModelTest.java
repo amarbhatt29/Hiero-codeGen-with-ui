@@ -5,87 +5,71 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.testing.mock.sling.ResourceResolverType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import io.wcm.testing.mock.aem.junit5.AemContext;
-import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-@ExtendWith(AemContextExtension.class)
-public class HeroCarouselModelTest {
+import com.hiero.design.core.testcontext.AppAemContext;
+import io.wcm.testing.mock.aem.junit5.AemContext;
+import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
-    private AemContext aemContext;
-    private Resource resource;
+@ExtendWith(AemContextExtension.class)
+class HeroCarouselModelTest {
+
+    private final AemContext context = AppAemContext.newAemContext();
+
+    private HeroCarouselModel model;
 
     @BeforeEach
-    void setUp(AemContext context) {
-        this.aemContext = context;
-        aemContext.load().json("/com/hiero/design/core/models/test-carousel.json", "/content");
+    void setUp() {
+        context.load().json("/com/hiero/design/core/models/HeroCarouselModelTest.json", "/content");
     }
 
     @Test
-    void testGetSlides() {
-        resource = aemContext.resourceResolver().getResource("/content/hero-carousel");
-        HeroCarouselModel model = resource.adaptTo(HeroCarouselModel.class);
+    void testIsAutoplayEnabled() {
+        Resource resource = context.resourceResolver().getResource("/content/hero-carousel");
+        assertNotNull(resource);
 
+        model = resource.adaptTo(HeroCarouselModel.class);
         assertNotNull(model);
-        assertTrue(model.hasSlides());
-        assertEquals(2, model.getSlideCount());
+        assertTrue(model.isAutoplayEnabled());
     }
 
     @Test
-    void testGetSlidesEmpty() {
-        resource = aemContext.resourceResolver().getResource("/content/empty-carousel");
-        HeroCarouselModel model = resource.adaptTo(HeroCarouselModel.class);
+    void testIsAutoplayDisabled() {
+        context.load().json("/com/hiero/design/core/models/HeroCarouselDisabledTest.json", "/content");
+        Resource resource = context.resourceResolver().getResource("/content/hero-carousel-disabled");
+        assertNotNull(resource);
 
+        model = resource.adaptTo(HeroCarouselModel.class);
         assertNotNull(model);
-        assertFalse(model.hasSlides());
-        assertEquals(0, model.getSlideCount());
+        assertFalse(model.isAutoplayEnabled());
     }
 
     @Test
-    void testAutoRotateDefault() {
-        resource = aemContext.resourceResolver().getResource("/content/hero-carousel");
-        HeroCarouselModel model = resource.adaptTo(HeroCarouselModel.class);
+    void testGetAutoplayInterval() {
+        Resource resource = context.resourceResolver().getResource("/content/hero-carousel");
+        model = resource.adaptTo(HeroCarouselModel.class);
+        assertNotNull(model);
 
-        assertFalse(model.isAutoRotate());
+        String interval = model.getAutoplayInterval();
+        assertNotNull(interval);
+        assertEquals("5000", interval);
     }
 
     @Test
-    void testRotationDelayDefault() {
-        resource = aemContext.resourceResolver().getResource("/content/hero-carousel");
-        HeroCarouselModel model = resource.adaptTo(HeroCarouselModel.class);
-
-        assertEquals(5000, model.getRotationDelay());
-    }
-
-    @Test
-    void testShowNavigationDefault() {
-        resource = aemContext.resourceResolver().getResource("/content/hero-carousel");
-        HeroCarouselModel model = resource.adaptTo(HeroCarouselModel.class);
-
+    void testIsShowNavigation() {
+        Resource resource = context.resourceResolver().getResource("/content/hero-carousel");
+        model = resource.adaptTo(HeroCarouselModel.class);
+        assertNotNull(model);
         assertTrue(model.isShowNavigation());
     }
 
     @Test
-    void testSlideProperties() {
-        resource = aemContext.resourceResolver().getResource("/content/hero-carousel");
-        HeroCarouselModel model = resource.adaptTo(HeroCarouselModel.class);
-
-        List<HeroCarouselSlide> slides = model.getSlides();
-        assertFalse(slides.isEmpty());
-
-        HeroCarouselSlide firstSlide = slides.get(0);
-        assertNotNull(firstSlide.getHeading());
-    }
-
-    @Test
-    void testGetId() {
-        resource = aemContext.resourceResolver().getResource("/content/hero-carousel");
-        HeroCarouselModel model = resource.adaptTo(HeroCarouselModel.class);
-
-        assertNotNull(model.getId());
+    void testIsEmpty() {
+        Resource resource = context.resourceResolver().getResource("/content/hero-carousel");
+        model = resource.adaptTo(HeroCarouselModel.class);
+        assertNotNull(model);
+        assertFalse(model.isEmpty());
     }
 }

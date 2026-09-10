@@ -1,94 +1,77 @@
 package com.hiero.design.core.models;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injectionstrategy.InjectionStrategyValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.sling.models.annotations.injectorspecific.OSGiService;
+import org.apache.sling.models.annotations.injectorspecific.ScriptVariable;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
-import com.adobe.cq.wcm.core.components.models.Component;
-import com.adobe.cq.wcm.core.components.util.ComponentUtils;
+import com.adobe.cq.dam.cfm.ContentFragment;
+import com.day.cq.wcm.api.Page;
 
 @Model(
-    adaptables = {SlingHttpServletRequest.class, Resource.class},
-    adapters = {Component.class},
-    resourceType = "hiero-design/components/hero-carousel",
+    adaptables = Resource.class,
     defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL
 )
-public class HeroCarouselModel implements Component {
+public class HeroCarouselModel {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HeroCarouselModel.class);
-    private static final String PN_AUTO_ROTATE = "autoRotate";
-    private static final String PN_ROTATION_DELAY = "rotationDelay";
-    private static final String PN_SHOW_NAV = "showNavigation";
-    private static final String SLIDES_NODE = "slides";
-
-    private Resource resource;
+    @ScriptVariable
     private ResourceResolver resourceResolver;
-    private SlingHttpServletRequest request;
+
+    @ValueMapValue
+    private String autoplayEnabled;
+
+    @ValueMapValue
+    private String autoplayInterval;
+
+    @ValueMapValue
+    private String showNavigation;
+
     private List<HeroCarouselSlide> slides;
-
-    public HeroCarouselModel(SlingHttpServletRequest request) {
-        this.request = request;
-        this.resource = request.getResource();
-        this.resourceResolver = request.getResourceResolver();
-    }
-
-    public HeroCarouselModel(Resource resource) {
-        this.resource = resource;
-        this.resourceResolver = resource.getResourceResolver();
-    }
-
-    @Override
-    public String getExportedType() {
-        return resource.getResourceType();
-    }
-
-    @Override
-    public String getId() {
-        return ComponentUtils.getId(resource, null, null);
-    }
 
     public List<HeroCarouselSlide> getSlides() {
         if (slides == null) {
-            slides = new ArrayList<>();
-            Resource slidesResource = resource.getChild(SLIDES_NODE);
-
-            if (slidesResource != null) {
-                for (Resource slideResource : slidesResource.getChildren()) {
-                    if (slideResource.isResourceType("nt:unstructured")) {
-                        HeroCarouselSlide slide = new HeroCarouselSlide(slideResource);
-                        slides.add(slide);
-                    }
-                }
-            }
+            slides = getChildSlides();
         }
         return slides;
     }
 
-    public boolean hasSlides() {
-        return !getSlides().isEmpty();
+    private List<HeroCarouselSlide> getChildSlides() {
+        Resource resource = this.resourceResolver.getResource(
+            this.resourceResolver.adaptTo(org.apache.sling.api.resource.ResourceResolver.class)
+                .getSearchPath()[0] + "/../hero-carousel/slides"
+        );
+        if (resource == null) {
+            return Collections.emptyList();
+        }
+
+        return StreamSupport
+            .stream(resource.getChildren().spliterator(), false)
+            .map(r -> r.adaptTo(HeroCarouselSlide.class))
+            .filter(slide -> slide != null)
+            .collect(Collectors.toList());
     }
 
-    public int getSlideCount() {
-        return getSlides().size();
+    public boolean isAutoplayEnabled() {
+        return "true".equals(autoplayEnabled);
     }
 
-    public boolean isAutoRotate() {
-        return resource.getValueMap().get(PN_AUTO_ROTATE, false);
-    }
-
-    public int getRotationDelay() {
-        return resource.getValueMap().get(PN_ROTATION_DELAY, 5000);
+    public String getAutoplayInterval() {
+        return autoplayInterval != null ? autoplayInterval : "5000";
     }
 
     public boolean isShowNavigation() {
-        return resource.getValueMap().get(PN_SHOW_NAV, true);
+        return !"false".equals(showNavigation);
+    }
+
+    public boolean isEmpty() {
+        return getSlides().isEmpty();
     }
 }

@@ -1,128 +1,109 @@
-<div data-sly-use.carousel="com.hiero.design.core.models.HeroCarouselModel"
-     data-sly-use.wcmmode="com.adobe.cq.wcm.core.components.commons.editor.dialog.inherited.InheritedField"
-     class="hero-carousel"
-     data-cmp-is="hero-carousel"
-     data-cmp-autorotate="${carousel.autoRotate}"
-     data-cmp-rotation-delay="${carousel.rotationDelay}"
-     role="region"
-     aria-label="Hero Carousel">
+<div class="hero-carousel" 
+     data-hero-carousel
+     data-autoplay="${model.autoplayEnabled}"
+     data-autoplay-interval="${model.autoplayInterval}"
+     data-slides-count="${model.slides.size()}">
 
-    <sly data-sly-test="!carousel.hasSlides" class="hero-carousel__placeholder">
-        <p>Hero Carousel - No slides configured</p>
-    </sly>
-
-    <sly data-sly-test="carousel.hasSlides">
-        <div class="hero-carousel__wrapper">
-            <div class="hero-carousel__slides"
-                 role="group"
-                 aria-label="Slide group">
-
-                <sly data-sly-list.slide="${carousel.slides}">
-                    <article class="hero-carousel__slide"
-                             role="group"
-                             aria-label="Slide ${slidelist.count} of ${carousel.slideCount}"
-                             data-slide-index="${slidelist.index}">
-
-                        <!-- Video Treatment -->
-                        <sly data-sly-test="${slide.hasVideo}">
-                            <div class="hero-carousel__media hero-carousel__media--video">
-                                <video class="hero-carousel__video"
-                                       poster="${slide.videoPoster}"
-                                       preload="metadata"
-                                       controls
-                                       aria-label="Video: ${slide.heading}">
-                                    <source src="${slide.video}" />
-                                    <p>Your browser does not support HTML5 video.</p>
-                                </video>
-                            </div>
-                        </sly>
-
-                        <!-- Image Treatment -->
-                        <sly data-sly-test="${!slide.hasVideo}">
-                            <div class="hero-carousel__media hero-carousel__media--image">
-                                <!-- Desktop image -->
-                                <picture class="hero-carousel__picture">
-                                    <source media="(min-width: 1024px)" 
-                                            srcset="${slide.effectiveImage}" />
-                                    <!-- Mobile image fallback -->
-                                    <sly data-sly-test="${slide.hasMobileImage}">
-                                        <source media="(max-width: 1023px)" 
-                                                srcset="${slide.mobileImage}" />
-                                    </sly>
-                                    <img class="hero-carousel__image"
-                                         src="${slide.effectiveImage}"
-                                         alt="${slide.altText}"
-                                         decoding="async"
-                                         loading="lazy" />
-                                </picture>
-                            </div>
-                        </sly>
-
-                        <!-- Content Overlay -->
-                        <div class="hero-carousel__content">
-                            <div class="hero-carousel__content-inner">
-                                <!-- Rate/Highlight -->
-                                <sly data-sly-test="${slide.rateText}">
-                                    <span class="hero-carousel__rate" aria-label="Rate: ${slide.rateText}">
-                                        ${slide.rateText}
-                                    </span>
-                                </sly>
-
-                                <!-- Heading -->
-                                <sly data-sly-test="${slide.heading}">
-                                    <h2 class="hero-carousel__heading">${slide.heading}</h2>
-                                </sly>
-
-                                <!-- Description -->
-                                <sly data-sly-test="${slide.description}">
-                                    <p class="hero-carousel__description">${slide.description}</p>
-                                </sly>
-
-                                <!-- CTA -->
-                                <sly data-sly-test="${slide.ctaLabel && slide.ctaLink}">
-                                    <a href="${slide.ctaLink}"
-                                       class="hero-carousel__cta btn btn--primary"
-                                       aria-label="${slide.ctaLabel}">
-                                        ${slide.ctaLabel}
-                                    </a>
-                                </sly>
-
-                                <!-- Legal/T&C -->
-                                <sly data-sly-test="${slide.legalText}">
-                                    <p class="hero-carousel__legal">${slide.legalText}</p>
-                                </sly>
-                            </div>
-                        </div>
-                    </article>
-                </sly>
-            </div>
-
-            <!-- Navigation -->
-            <sly data-sly-test="${carousel.slideCount > 1 && carousel.isShowNavigation}">
-                <div class="hero-carousel__navigation" role="group" aria-label="Carousel controls">
-                    <button class="hero-carousel__nav-btn hero-carousel__nav-btn--prev"
-                            aria-label="Previous slide"
-                            type="button">
-                        <span class="sr-only">Previous</span>
-                    </button>
-                    <div class="hero-carousel__indicators">
-                        <sly data-sly-list.indicator="${carousel.slides}">
-                            <button class="hero-carousel__indicator"
-                                    data-slide-index="${indicatorlist.index}"
-                                    aria-label="Go to slide ${indicatorlist.count}"
-                                    aria-pressed="${indicatorlist.first ? 'true' : 'false'}"
-                                    type="button">
-                                <span class="sr-only">Slide ${indicatorlist.count}</span>
-                            </button>
-                        </sly>
-                    </div>
-                    <button class="hero-carousel__nav-btn hero-carousel__nav-btn--next"
-                            aria-label="Next slide"
-                            type="button">
-                        <span class="sr-only">Next</span>
-                    </button>
-                </div>
+  <div class="hero-carousel__track" role="region" aria-label="Hero carousel">
+    <div class="hero-carousel__slides">
+      <sly data-sly-list.slide="${model.slides}">
+        <article class="hero-carousel__slide" 
+                 role="group" 
+                 aria-roledescription="slide"
+                 aria-label="Slide ${slideList.index + 1} of ${slideList.count}"
+                 tabindex="${slideList.first ? 0 : -1}">
+          
+          <div class="hero-carousel__media">
+            <sly data-sly-test="${slide.hasVideo}">
+              <video class="hero-carousel__video" 
+                     playsinline 
+                     muted 
+                     loop
+                     aria-hidden="true">
+                <source data-sly-test="${slide.desktopVideo}" 
+                        src="${slide.desktopVideo}" 
+                        media="(min-width: 768px)" 
+                        type="video/mp4">
+                <source data-sly-test="${slide.mobileVideo}" 
+                        src="${slide.mobileVideo}" 
+                        type="video/mp4">
+              </video>
             </sly>
-        </div>
-    </sly>
+            
+            <sly data-sly-test="${!slide.hasVideo && slide.hasImage}">
+              <picture class="hero-carousel__picture">
+                <source data-sly-test="${slide.mobileImage}" 
+                        srcset="${slide.mobileImage}" 
+                        media="(max-width: 767px)">
+                <img class="hero-carousel__image" 
+                     src="${slide.desktopImage || slide.mobileImage}" 
+                     alt="${slide.heading || 'Hero carousel slide'}">
+              </picture>
+            </sly>
+          </div>
+          
+          <div class="hero-carousel__content">
+            <div class="hero-carousel__text-group">
+              <sly data-sly-test="${slide.heading}">
+                <h2 class="hero-carousel__heading">${slide.heading}</h2>
+              </sly>
+              
+              <sly data-sly-test="${slide.description}">
+                <p class="hero-carousel__description">${slide.description}</p>
+              </sly>
+              
+              <sly data-sly-test="${slide.rateHighlight}">
+                <div class="hero-carousel__rate">${slide.rateHighlight}</div>
+              </sly>
+            </div>
+            
+            <sly data-sly-test="${slide.ctaLabel}">
+              <a class="hero-carousel__cta" 
+                 href="${slide.ctaLink || '#'}" 
+                 target="${slide.ctaTarget || '_self'}"
+                 data-analytics-event="hero_carousel_cta"
+                 data-analytics-label="${slide.ctaLabel}">
+                ${slide.ctaLabel}
+              </a>
+            </sly>
+            
+            <sly data-sly-test="${slide.legalCopy}">
+              <p class="hero-carousel__legal">${slide.legalCopy}</p>
+            </sly>
+          </div>
+        </article>
+      </sly>
+    </div>
+  </div>
+  
+  <sly data-sly-test="${model.isShowNavigation() && model.slides.size() > 1}">
+    <div class="hero-carousel__controls" role="group" aria-label="Carousel controls">
+      <button class="hero-carousel__nav hero-carousel__nav--prev" 
+              type="button" 
+              aria-label="Previous slide"
+              data-hero-carousel-prev>
+        <span class="sr-only">Previous</span>
+      </button>
+      <button class="hero-carousel__nav hero-carousel__nav--next" 
+              type="button" 
+              aria-label="Next slide"
+              data-hero-carousel-next>
+        <span class="sr-only">Next</span>
+      </button>
+    </div>
+    
+    <div class="hero-carousel__indicators" role="tablist" aria-label="Slide indicators">
+      <sly data-sly-list.indicator="${model.slides}">
+        <button class="hero-carousel__indicator" 
+                type="button" 
+                role="tab"
+                aria-selected="${indicatorList.first}"
+                aria-label="Slide ${indicatorList.index + 1}"
+                data-slide-index="${indicatorList.index}"
+                tabindex="${indicatorList.first ? 0 : -1}">
+          <span class="sr-only">Slide ${indicatorList.index + 1}</span>
+        </button>
+      </sly>
+    </div>
+  </sly>
 </div>
