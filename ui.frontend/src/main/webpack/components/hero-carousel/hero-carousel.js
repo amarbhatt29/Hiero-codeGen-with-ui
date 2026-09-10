@@ -1,215 +1,187 @@
 export class HeroCarousel {
   constructor(element) {
     this.element = element;
-    this.slides = this.element.querySelectorAll('[data-carousel-slide]');
-    this.dotsContainer = this.element.querySelector('[role="group"][aria-label="Slide navigation"]');
-    this.prevBtn = this.element.querySelector('[data-carousel-prev]');
-    this.nextBtn = this.element.querySelector('[data-carousel-next]');
-    this.configScript = this.element.querySelector('[data-carousel-config]');
-    
+    this.container = element.querySelector('.hero-carousel__container');
+    this.slides = Array.from(element.querySelectorAll('.hero-carousel__slide'));
+    this.buttons = element.querySelectorAll('[data-slide-nav]');
+    this.indicators = element.querySelectorAll('.hero-carousel__indicator');
+    this.prevBtn = element.querySelector('[data-slide-nav="prev"]');
+    this.nextBtn = element.querySelector('[data-slide-nav="next"]');
+    this.carouselId = element.getAttribute('data-carousel-id') || `carousel-${Math.random().toString(36).substr(2, 9)}`;
+    this.autoRotate = element.getAttribute('data-auto-rotate') === 'true';
+    this.rotateInterval = parseInt(element.getAttribute('data-rotate-interval'), 10) || 5000;
     this.currentIndex = 0;
-    this.autoRotateEnabled = false;
-    this.autoRotateInterval = 5000;
     this.autoRotateTimer = null;
-    this.touchStartX = 0;
-    this.touchEndX = 0;
-    
+    this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
     this.init();
   }
 
   init() {
-    if (this.slides.length < 2) return;
+    if (this.slides.length <= 1) {
+      return;
+    }
 
-    this.setupAutoRotate();
-    this.addEventListeners();
-    this.updateCarousel();
-  }
+    this.setActiveSlide(0);
+    this.attachEventListeners();
 
-  setupAutoRotate() {
-    if (!this.configScript) return;
-    
-    try {
-      const config = JSON.parse(this.configScript.textContent);
-      this.autoRotateEnabled = config.autoRotate === true;
-      this.autoRotateInterval = config.interval || 5000;
-      
-      if (this.autoRotateEnabled) {
+    if (this.autoRotate && !this.prefersReducedMotion) {
+      this.startAutoRotate();
+    }
+
+    this.element.addEventListener('mouseenter', () => this.stopAutoRotate());
+    this.element.addEventListener('mouseleave', () => {
+      if (this.autoRotate && !this.prefersReducedMotion) {
         this.startAutoRotate();
-        
-        this.element.addEventListener('mouseenter', () => this.pauseAutoRotate());
-        this.element.addEventListener('mouseleave', () => this.startAutoRotate());
       }
-    } catch (e) {
-      console.error('Hero Carousel: Invalid configuration', e);
-    }
+    });
   }
 
-  addEventListeners() {
+  attachEventListeners() {
     if (this.prevBtn) {
-      this.prevBtn.addEventListener('click', () => this.prev());
+      this.prevBtn.addEventListener('click', () => this.goToPrevious());
     }
-    
+
     if (this.nextBtn) {
-      this.nextBtn.addEventListener('click', () => this.next());
+      this.nextBtn.addEventListener('click', () => this.goToNext());
     }
 
-    if (this.dotsContainer) {
-      const dots = this.dotsContainer.querySelectorAll('[data-carousel-dot]');
-      dots.forEach((dot, index) => {
-        dot.addEventListener('click', () => this.goToSlide(index));
-      });
+    this.indicators.forEach((indicator, index) => {
+      indicator.addEventListener('click', () => this.goToSlide(index));
+    });
+
+    this.element.addEventListener('keydown', (event) => this.handleKeyboard(event));
+
+    if ('ontouchstart' in window) {
+      this.attachTouchHandlers();
     }
-
-    this.element.addEventListener('touchstart', (e) => this.handleTouchStart(e));
-    this.element.addEventListener('touchend', (e) => this.handleTouchEnd(e));
-
-    document.addEventListener('keydown', (e) => this.handleKeyPress(e));
   }
 
-  prev() {
-    this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
-    this.resetAutoRotate();
-    this.updateCarousel();
-    this.trackInteraction('prev');
+  handleKeyboard(event) {
+    switch (event.key) {
+      case 'ArrowLeft':
+        this.goToPrevious();
+        break;
+      case 'ArrowRight':
+        this.goToNext();
+        break;
+      default:
+        break;
+    }
   }
 
-  next() {
-    this.currentIndex = (this.currentIndex + 1) % this.slides.length;
-    this.resetAutoRotate();
-    this.updateCarousel();
-    this.trackInteraction('next');
+  attachTouchHandlers() {
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    this.container.addEventListener('touchstart', (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+    });
+
+    this.container.addEventListener('touchend', (event) => {
+      touchEndX = event.changedTouches[0].screenX;
+      this.handleSwipe(touchStartX, touchEndX);
+    });
+  }
+
+  handleSwipe(startX, endX) {
+    const threshold = 50;
+    const diff = startX - endX;
+
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        this.goToNext();
+      } else {
+        this.goToPrevious();
+      }
+    }
   }
 
   goToSlide(index) {
-    if (index >= 0 && index < this.slides.length) {
-      this.currentIndex = index;
-      this.resetAutoRotate();
-      this.updateCarousel();
-      this.trackInteraction('dot', index);
+    if (index < 0 || index >= this.slides.length || index === this.currentIndex) {
+      return;
+    }
+
+    this.stopAutoRotate();
+    this.setActiveSlide(index);
+
+    if (this.autoRotate && !this.prefersReducedMotion) {
+      this.startAutoRotate();
     }
   }
 
-  handleTouchStart(e) {
-    this.touchStartX = e.changedTouches[0].clientX;
+  goToNext() {
+    const nextIndex = (this.currentIndex + 1) % this.slides.length;
+    this.goToSlide(nextIndex);
   }
 
-  handleTouchEnd(e) {
-    this.touchEndX = e.changedTouches[0].clientX;
-    this.handleSwipe();
+  goToPrevious() {
+    const prevIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+    this.goToSlide(prevIndex);
   }
 
-  handleSwipe() {
-    const swipeThreshold = 50;
-    const diff = this.touchStartX - this.touchEndX;
-
-    if (Math.abs(diff) > swipeThreshold) {
-      if (diff > 0) {
-        this.next();
-      } else {
-        this.prev();
-      }
-    }
-  }
-
-  handleKeyPress(e) {
-    if (!this.element.contains(document.activeElement)) return;
-
-    if (e.key === 'ArrowLeft') {
-      this.prev();
-      e.preventDefault();
-    } else if (e.key === 'ArrowRight') {
-      this.next();
-      e.preventDefault();
-    }
-  }
-
-  updateCarousel() {
-    this.slides.forEach((slide, index) => {
-      const isActive = index === this.currentIndex;
-      slide.setAttribute('aria-current', isActive);
+  setActiveSlide(index) {
+    this.slides.forEach((slide) => {
+      slide.classList.remove('is-active');
     });
 
-    if (this.dotsContainer) {
-      const dots = this.dotsContainer.querySelectorAll('[data-carousel-dot]');
-      dots.forEach((dot, index) => {
-        dot.setAttribute('aria-current', index === this.currentIndex);
-      });
-    }
-
-    if (this.prevBtn) {
-      this.prevBtn.disabled = this.slides.length <= 1;
-    }
-    if (this.nextBtn) {
-      this.nextBtn.disabled = this.slides.length <= 1;
-    }
-
-    this.playActiveSlideVideo();
-  }
-
-  playActiveSlideVideo() {
-    const activeSlide = this.slides[this.currentIndex];
-    const videos = this.element.querySelectorAll('[data-carousel-video]');
-    
-    videos.forEach((video) => {
-      if (activeSlide.contains(video)) {
-        video.play().catch(() => {
-          // Video play failed, fallback image will show
-        });
-      } else {
-        video.pause();
-      }
+    this.indicators.forEach((indicator, i) => {
+      indicator.setAttribute('aria-pressed', i === index ? 'true' : 'false');
     });
+
+    this.slides[index].classList.add('is-active');
+    this.currentIndex = index;
+
+    this.trackAnalytics(index);
   }
 
   startAutoRotate() {
-    if (!this.autoRotateEnabled || this.autoRotateTimer) return;
-    
     this.autoRotateTimer = setInterval(() => {
-      this.next();
-    }, this.autoRotateInterval);
+      this.goToNext();
+    }, this.rotateInterval);
   }
 
-  pauseAutoRotate() {
+  stopAutoRotate() {
     if (this.autoRotateTimer) {
       clearInterval(this.autoRotateTimer);
       this.autoRotateTimer = null;
     }
   }
 
-  resetAutoRotate() {
-    this.pauseAutoRotate();
-    if (this.autoRotateEnabled) {
-      this.startAutoRotate();
+  trackAnalytics(slideIndex) {
+    if (window.dataLayer) {
+      window.dataLayer.push({
+        event: 'hero_carousel_slide_change',
+        carousel_id: this.carouselId,
+        slide_index: slideIndex,
+        timestamp: new Date().toISOString(),
+      });
     }
   }
 
-  trackInteraction(action, slideIndex = this.currentIndex) {
-    if (!window.dataLayer) return;
-    
-    window.dataLayer.push({
-      event: 'hero_carousel_interaction',
-      carousel_action: action,
-      carousel_slide: slideIndex + 1,
-      carousel_total_slides: this.slides.length
-    });
+  destroy() {
+    this.stopAutoRotate();
+    if (this.prevBtn) {
+      this.prevBtn.removeEventListener('click', () => this.goToPrevious());
+    }
+    if (this.nextBtn) {
+      this.nextBtn.removeEventListener('click', () => this.goToNext());
+    }
   }
 }
 
-// Auto-initialize all carousels on page
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-carousel-root]').forEach((element) => {
-    new HeroCarousel(element);
+function initHeroCarousels() {
+  const carousels = document.querySelectorAll('.hero-carousel');
+  carousels.forEach((carousel) => {
+    if (!carousel.dataset.initialized) {
+      new HeroCarousel(carousel);
+      carousel.dataset.initialized = 'true';
+    }
   });
-});
+}
 
-// Support dynamic component loading
-if (window.Granite && window.Granite.author && window.Granite.author.edit) {
-  window.Granite.author.edit.registerContentLoaded(() => {
-    document.querySelectorAll('[data-carousel-root]').forEach((element) => {
-      if (!element._heroCarouselInitialized) {
-        new HeroCarousel(element);
-        element._heroCarouselInitialized = true;
-      }
-    });
-  });
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHeroCarousels);
+} else {
+  initHeroCarousels();
 }

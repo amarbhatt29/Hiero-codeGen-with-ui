@@ -12,10 +12,10 @@ public class HeroCarouselSlide {
     private String desktopImage;
 
     @ValueMapValue
-    private String desktopVideo;
+    private String mobileImage;
 
     @ValueMapValue
-    private String mobileImage;
+    private String desktopVideo;
 
     @ValueMapValue
     private String mobileVideo;
@@ -36,21 +36,21 @@ public class HeroCarouselSlide {
     private String ctaLink;
 
     @ValueMapValue
-    private String disclaimer;
+    private Boolean ctaNewTab;
 
     @ValueMapValue
-    private String imageAltText;
+    private String disclaimer;
 
     public String getDesktopImage() {
         return desktopImage;
     }
 
-    public String getDesktopVideo() {
-        return desktopVideo;
-    }
-
     public String getMobileImage() {
         return mobileImage;
+    }
+
+    public String getDesktopVideo() {
+        return desktopVideo;
     }
 
     public String getMobileVideo() {
@@ -77,27 +77,31 @@ public class HeroCarouselSlide {
         return ctaLink;
     }
 
+    public Boolean getCtaNewTab() {
+        return ctaNewTab != null ? ctaNewTab : false;
+    }
+
     public String getDisclaimer() {
         return disclaimer;
     }
 
-    public String getImageAltText() {
-        return imageAltText;
+    public Boolean hasHeading() {
+        return heading != null && !heading.trim().isEmpty();
     }
 
-    public boolean hasDesktopMedia() {
-        return desktopImage != null || desktopVideo != null;
+    public Boolean hasDescription() {
+        return description != null && !description.trim().isEmpty();
     }
 
-    public boolean hasMobileMedia() {
-        return mobileImage != null || mobileVideo != null;
+    public Boolean hasRateHighlight() {
+        return rateHighlight != null && !rateHighlight.trim().isEmpty();
     }
 
-    public boolean isVideoSlide() {
-        return desktopVideo != null || mobileVideo != null;
+    public Boolean hasCta() {
+        return ctaLabel != null && !ctaLabel.trim().isEmpty() && ctaLink != null && !ctaLink.trim().isEmpty();
     }
 
-    public boolean hasCta() {
-        return ctaLabel != null && ctaLink != null;
+    public Boolean hasDisclaimer() {
+        return disclaimer != null && !disclaimer.trim().isEmpty();
     }
 }

@@ -1,74 +1,61 @@
 package com.hiero.design.core.models;
 
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
-import org.apache.sling.api.SlingHttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
+import javax.annotation.PostConstruct;
 import org.apache.sling.api.resource.Resource;
 import org.apache.sling.models.annotations.DefaultInjectionStrategy;
 import org.apache.sling.models.annotations.Model;
 import org.apache.sling.models.annotations.injectorspecific.ChildResource;
 import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
-import com.adobe.cq.wcm.core.components.models.Component;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-@Model(adaptables = SlingHttpServletRequest.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
-public class HeroCarouselModel implements Component {
+@Model(adaptables = Resource.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
+public class HeroCarouselModel {
 
     @ValueMapValue
-    private String jcr_title;
-
-    @ChildResource(name = "slides")
-    private Resource slidesResource;
-
-    @ValueMapValue
-    private Boolean autoRotate;
+    private String id;
 
     @ValueMapValue
     private Long autoRotateInterval;
 
-    private List<HeroCarouselSlide> slides;
+    @ValueMapValue
+    private Boolean enableAutoRotate;
 
-    public List<HeroCarouselSlide> getSlides() {
-        if (slides == null) {
-            slides = new ArrayList<>();
-            if (slidesResource != null) {
-                for (Resource child : slidesResource.getChildren()) {
-                    HeroCarouselSlide slide = child.adaptTo(HeroCarouselSlide.class);
-                    if (slide != null) {
-                        slides.add(slide);
-                    }
+    @ChildResource
+    private Resource slides;
+
+    private List<HeroCarouselSlide> slideList;
+
+    @PostConstruct
+    protected void init() {
+        slideList = new ArrayList<>();
+        if (slides != null && slides.hasChildren()) {
+            for (Resource child : slides.getChildren()) {
+                HeroCarouselSlide slide = child.adaptTo(HeroCarouselSlide.class);
+                if (slide != null) {
+                    slideList.add(slide);
                 }
             }
         }
-        return slides;
     }
 
-    public boolean hasSlides() {
-        return !getSlides().isEmpty();
-    }
-
-    public int getSlideCount() {
-        return getSlides().size();
-    }
-
-    public boolean shouldAutoRotate() {
-        return autoRotate != null && autoRotate && getSlideCount() > 1;
-    }
-
-    public long getAutoRotateInterval() {
-        return autoRotateInterval != null ? autoRotateInterval : 5000;
-    }
-
-    @Override
     public String getId() {
-        return null;
+        return id;
     }
 
-    @Override
-    public ComponentData getComponentData() {
-        return null;
+    public Long getAutoRotateInterval() {
+        return autoRotateInterval != null ? autoRotateInterval : 5000L;
+    }
+
+    public Boolean getEnableAutoRotate() {
+        return enableAutoRotate != null ? enableAutoRotate : false;
+    }
+
+    public List<HeroCarouselSlide> getSlides() {
+        return slideList;
+    }
+
+    public Boolean hasSlides() {
+        return slideList != null && !slideList.isEmpty();
     }
 }
