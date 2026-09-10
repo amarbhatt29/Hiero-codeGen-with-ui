@@ -1,205 +1,215 @@
-(function() {
-  class HeroCarousel {
-    constructor(container) {
-      this.container = container;
-      this.viewport = container.querySelector('.hero-carousel__viewport');
-      this.slides = Array.from(container.querySelectorAll('.hero-carousel__slide'));
-      this.prevBtn = container.querySelector('.hero-carousel__button--prev');
-      this.nextBtn = container.querySelector('.hero-carousel__button--next');
-      this.dots = Array.from(container.querySelectorAll('.hero-carousel__dot'));
-      this.config = this.parseConfig();
+export class HeroCarousel {
+  constructor(element) {
+    this.element = element;
+    this.slides = this.element.querySelectorAll('[data-carousel-slide]');
+    this.dotsContainer = this.element.querySelector('[role="group"][aria-label="Slide navigation"]');
+    this.prevBtn = this.element.querySelector('[data-carousel-prev]');
+    this.nextBtn = this.element.querySelector('[data-carousel-next]');
+    this.configScript = this.element.querySelector('[data-carousel-config]');
+    
+    this.currentIndex = 0;
+    this.autoRotateEnabled = false;
+    this.autoRotateInterval = 5000;
+    this.autoRotateTimer = null;
+    this.touchStartX = 0;
+    this.touchEndX = 0;
+    
+    this.init();
+  }
+
+  init() {
+    if (this.slides.length < 2) return;
+
+    this.setupAutoRotate();
+    this.addEventListeners();
+    this.updateCarousel();
+  }
+
+  setupAutoRotate() {
+    if (!this.configScript) return;
+    
+    try {
+      const config = JSON.parse(this.configScript.textContent);
+      this.autoRotateEnabled = config.autoRotate === true;
+      this.autoRotateInterval = config.interval || 5000;
       
-      this.currentIndex = 0;
-      this.autoRotateInterval = null;
-      this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      
-      if (this.slides.length > 1) {
-        this.init();
+      if (this.autoRotateEnabled) {
+        this.startAutoRotate();
+        
+        this.element.addEventListener('mouseenter', () => this.pauseAutoRotate());
+        this.element.addEventListener('mouseleave', () => this.startAutoRotate());
       }
+    } catch (e) {
+      console.error('Hero Carousel: Invalid configuration', e);
+    }
+  }
+
+  addEventListeners() {
+    if (this.prevBtn) {
+      this.prevBtn.addEventListener('click', () => this.prev());
     }
     
-    parseConfig() {
-      const configEl = this.container.querySelector('.hero-carousel__config');
-      if (configEl) {
-        try {
-          return JSON.parse(configEl.textContent);
-        } catch (e) {
-          console.warn('Failed to parse carousel config', e);
-        }
-      }
-      return {};
+    if (this.nextBtn) {
+      this.nextBtn.addEventListener('click', () => this.next());
     }
-    
-    init() {
-      this.setActiveSlide(0);
-      this.attachEventListeners();
-      this.startAutoRotate();
-    }
-    
-    attachEventListeners() {
-      if (this.prevBtn) {
-        this.prevBtn.addEventListener('click', () => this.prevSlide());
-      }
-      if (this.nextBtn) {
-        this.nextBtn.addEventListener('click', () => this.nextSlide());
-      }
-      
-      this.dots.forEach((dot, index) => {
+
+    if (this.dotsContainer) {
+      const dots = this.dotsContainer.querySelectorAll('[data-carousel-dot]');
+      dots.forEach((dot, index) => {
         dot.addEventListener('click', () => this.goToSlide(index));
       });
-      
-      document.addEventListener('keydown', (e) => this.handleKeyboard(e));
-      this.container.addEventListener('mouseenter', () => this.stopAutoRotate());
-      this.container.addEventListener('mouseleave', () => this.startAutoRotate());
-      
-      this.attachTouchListeners();
     }
-    
-    handleKeyboard(e) {
-      if (e.key === 'ArrowLeft') {
-        this.prevSlide();
-      } else if (e.key === 'ArrowRight') {
-        this.nextSlide();
-      }
-    }
-    
-    attachTouchListeners() {
-      let touchStartX = 0;
-      let touchEndX = 0;
-      
-      this.viewport.addEventListener('touchstart', (e) => {
-        touchStartX = e.changedTouches[0].screenX;
-      }, false);
-      
-      this.viewport.addEventListener('touchend', (e) => {
-        touchEndX = e.changedTouches[0].screenX;
-        this.handleSwipe(touchStartX, touchEndX);
-      }, false);
-    }
-    
-    handleSwipe(startX, endX) {
-      const threshold = 50;
-      const diff = startX - endX;
-      
-      if (Math.abs(diff) > threshold) {
-        if (diff > 0) {
-          this.nextSlide();
-        } else {
-          this.prevSlide();
-        }
-      }
-    }
-    
-    setActiveSlide(index) {
-      this.slides.forEach((slide, i) => {
-        slide.classList.remove('is-active', 'is-prev');
-        if (i === index) {
-          slide.classList.add('is-active');
-        } else {
-          slide.classList.add('is-prev');
-        }
-      });
-      
-      this.dots.forEach((dot, i) => {
-        dot.classList.toggle('is-active', i === index);
-        dot.setAttribute('aria-pressed', i === index ? 'true' : 'false');
-      });
-      
+
+    this.element.addEventListener('touchstart', (e) => this.handleTouchStart(e));
+    this.element.addEventListener('touchend', (e) => this.handleTouchEnd(e));
+
+    document.addEventListener('keydown', (e) => this.handleKeyPress(e));
+  }
+
+  prev() {
+    this.currentIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
+    this.resetAutoRotate();
+    this.updateCarousel();
+    this.trackInteraction('prev');
+  }
+
+  next() {
+    this.currentIndex = (this.currentIndex + 1) % this.slides.length;
+    this.resetAutoRotate();
+    this.updateCarousel();
+    this.trackInteraction('next');
+  }
+
+  goToSlide(index) {
+    if (index >= 0 && index < this.slides.length) {
       this.currentIndex = index;
-      
-      if (this.prevBtn) {
-        this.prevBtn.disabled = index === 0 && this.slides.length <= 1;
-      }
-      if (this.nextBtn) {
-        this.nextBtn.disabled = index === this.slides.length - 1 && this.slides.length <= 1;
-      }
+      this.resetAutoRotate();
+      this.updateCarousel();
+      this.trackInteraction('dot', index);
     }
-    
-    nextSlide() {
-      this.stopAutoRotate();
-      const nextIndex = (this.currentIndex + 1) % this.slides.length;
-      this.setActiveSlide(nextIndex);
-      this.trackEvent('next');
-      this.startAutoRotate();
-    }
-    
-    prevSlide() {
-      this.stopAutoRotate();
-      const prevIndex = (this.currentIndex - 1 + this.slides.length) % this.slides.length;
-      this.setActiveSlide(prevIndex);
-      this.trackEvent('prev');
-      this.startAutoRotate();
-    }
-    
-    goToSlide(index) {
-      if (index !== this.currentIndex) {
-        this.stopAutoRotate();
-        this.setActiveSlide(index);
-        this.trackEvent('dot', index);
-        this.startAutoRotate();
+  }
+
+  handleTouchStart(e) {
+    this.touchStartX = e.changedTouches[0].clientX;
+  }
+
+  handleTouchEnd(e) {
+    this.touchEndX = e.changedTouches[0].clientX;
+    this.handleSwipe();
+  }
+
+  handleSwipe() {
+    const swipeThreshold = 50;
+    const diff = this.touchStartX - this.touchEndX;
+
+    if (Math.abs(diff) > swipeThreshold) {
+      if (diff > 0) {
+        this.next();
+      } else {
+        this.prev();
       }
     }
-    
-    startAutoRotate() {
-      if (this.config.autoRotateInterval && !this.prefersReducedMotion) {
-        if (this.autoRotateInterval) {
-          clearInterval(this.autoRotateInterval);
-        }
-        this.autoRotateInterval = setInterval(() => {
-          this.nextSlide();
-        }, this.config.autoRotateInterval * 1000);
-      }
+  }
+
+  handleKeyPress(e) {
+    if (!this.element.contains(document.activeElement)) return;
+
+    if (e.key === 'ArrowLeft') {
+      this.prev();
+      e.preventDefault();
+    } else if (e.key === 'ArrowRight') {
+      this.next();
+      e.preventDefault();
     }
-    
-    stopAutoRotate() {
-      if (this.autoRotateInterval) {
-        clearInterval(this.autoRotateInterval);
-        this.autoRotateInterval = null;
-      }
+  }
+
+  updateCarousel() {
+    this.slides.forEach((slide, index) => {
+      const isActive = index === this.currentIndex;
+      slide.setAttribute('aria-current', isActive);
+    });
+
+    if (this.dotsContainer) {
+      const dots = this.dotsContainer.querySelectorAll('[data-carousel-dot]');
+      dots.forEach((dot, index) => {
+        dot.setAttribute('aria-current', index === this.currentIndex);
+      });
     }
+
+    if (this.prevBtn) {
+      this.prevBtn.disabled = this.slides.length <= 1;
+    }
+    if (this.nextBtn) {
+      this.nextBtn.disabled = this.slides.length <= 1;
+    }
+
+    this.playActiveSlideVideo();
+  }
+
+  playActiveSlideVideo() {
+    const activeSlide = this.slides[this.currentIndex];
+    const videos = this.element.querySelectorAll('[data-carousel-video]');
     
-    trackEvent(action, value) {
-      const ctaLink = this.slides[this.currentIndex]?.querySelector('.hero-carousel__cta');
-      if (window.dataLayer && ctaLink) {
-        window.dataLayer.push({
-          event: 'hero_carousel_interaction',
-          action: action,
-          slide_index: this.currentIndex,
-          slide_value: value,
-          cta_destination: ctaLink.href
+    videos.forEach((video) => {
+      if (activeSlide.contains(video)) {
+        video.play().catch(() => {
+          // Video play failed, fallback image will show
         });
+      } else {
+        video.pause();
       }
-    }
+    });
+  }
+
+  startAutoRotate() {
+    if (!this.autoRotateEnabled || this.autoRotateTimer) return;
     
-    destroy() {
-      this.stopAutoRotate();
-      if (this.prevBtn) this.prevBtn.removeEventListener('click', () => this.prevSlide());
-      if (this.nextBtn) this.nextBtn.removeEventListener('click', () => this.nextSlide());
-      document.removeEventListener('keydown', (e) => this.handleKeyboard(e));
+    this.autoRotateTimer = setInterval(() => {
+      this.next();
+    }, this.autoRotateInterval);
+  }
+
+  pauseAutoRotate() {
+    if (this.autoRotateTimer) {
+      clearInterval(this.autoRotateTimer);
+      this.autoRotateTimer = null;
     }
   }
-  
-  // Auto-initialize all carousel instances
-  function initCarousels() {
-    document.querySelectorAll('.hero-carousel').forEach(container => {
-      if (!container.dataset.carouselInitialized) {
-        new HeroCarousel(container);
-        container.dataset.carouselInitialized = 'true';
+
+  resetAutoRotate() {
+    this.pauseAutoRotate();
+    if (this.autoRotateEnabled) {
+      this.startAutoRotate();
+    }
+  }
+
+  trackInteraction(action, slideIndex = this.currentIndex) {
+    if (!window.dataLayer) return;
+    
+    window.dataLayer.push({
+      event: 'hero_carousel_interaction',
+      carousel_action: action,
+      carousel_slide: slideIndex + 1,
+      carousel_total_slides: this.slides.length
+    });
+  }
+}
+
+// Auto-initialize all carousels on page
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('[data-carousel-root]').forEach((element) => {
+    new HeroCarousel(element);
+  });
+});
+
+// Support dynamic component loading
+if (window.Granite && window.Granite.author && window.Granite.author.edit) {
+  window.Granite.author.edit.registerContentLoaded(() => {
+    document.querySelectorAll('[data-carousel-root]').forEach((element) => {
+      if (!element._heroCarouselInitialized) {
+        new HeroCarousel(element);
+        element._heroCarouselInitialized = true;
       }
     });
-  }
-  
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initCarousels);
-  } else {
-    initCarousels();
-  }
-  
-  // Support for dynamic carousel loading
-  if (window.MutationObserver) {
-    const observer = new MutationObserver(() => {
-      initCarousels();
-    });
-    observer.observe(document.body, { childList: true, subtree: true });
-  }
-})();
+  });
+}

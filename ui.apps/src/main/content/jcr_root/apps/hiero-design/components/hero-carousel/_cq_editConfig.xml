@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    jcr:primaryType="cq:EditConfig">
+    jcr:primaryType="cq:EditConfig"
+    cq:layout="editbar">
+    <cq:inplaceEditing jcr:primaryType="cq:InPlaceEditingConfig" active="false"/>
     <cq:dropTargets jcr:primaryType="nt:unstructured">
-        <image
-            jcr:primaryType="cq:DropTargetConfig"
-            accept="[image.*]"
-            groups="[media]"
-            propertyName="./desktopImage"/>
+        <slides jcr:primaryType="nt:unstructured" accept="[./slides/*]" groups="[media,paragraph]" propertyName="./slides"/>
     </cq:dropTargets>
-    <cq:inplaceEditing
-        jcr:primaryType="cq:InplaceEditingConfig"
-        active="{Boolean}true"
-        editorType="text"/>
 </jcr:root>

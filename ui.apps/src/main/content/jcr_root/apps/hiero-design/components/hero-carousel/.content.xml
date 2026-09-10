@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
     jcr:primaryType="cq:Component"
     jcr:title="Hero Carousel"
-    jcr:description="Homepage hero carousel with multiple campaign variants, promotional imagery/video, rate highlights and primary CTA"
-    componentGroup=".hidden"
-    sling:resourceSuperType="cq/Page/components/structureddata">
-    <sling:resourceType jcr:primaryType="nt:unstructured"/>
+    sling:resourceSuperType="cq/Page/v3/components/container"
+    componentGroup="hiero-design.components"
+    cq:isContainer="true"
+    cq:dialog="/apps/hiero-design/components/hero-carousel/_cq_dialog"
+    cq:editConfig="/apps/hiero-design/components/hero-carousel/_cq_editConfig"
+    cq:icon="/apps/hiero-design/components/hero-carousel/icon.svg"/>
 </jcr:root>
