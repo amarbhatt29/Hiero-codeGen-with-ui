@@ -1,0 +1,84 @@
+<div data-sly-use.model="com.hiero.design.core.models.HeroCarouselModel" class="hero-carousel" id="hero-carousel-${resource.name @ context='html'}">
+    <article class="hero-carousel__container" role="region" aria-label="Hero carousel">
+        <div class="hero-carousel__viewport" role="listbox">
+            <sly data-sly-test="${model.slides}">
+                <sly data-sly-list="${model.slides}">
+                    <section class="hero-carousel__slide" role="option" aria-label="${item.heading}" data-index="${itemList.index}">
+                        <div class="hero-carousel__media" role="img">
+                            <!-- Desktop Image -->
+                            <div class="hero-carousel__image hero-carousel__image--desktop">
+                                <sly data-sly-test="${item.desktopImageUrl}">
+                                    <img src="${item.desktopImageUrl @ context='attribute'}" 
+                                         alt="${item.heading @ context='attribute'}" 
+                                         class="hero-carousel__img" 
+                                         loading="lazy" />
+                                </sly>
+                            </div>
+                            <!-- Mobile Image -->
+                            <div class="hero-carousel__image hero-carousel__image--mobile">
+                                <sly data-sly-test="${item.mobileImageUrl}">
+                                    <img src="${item.mobileImageUrl @ context='attribute'}" 
+                                         alt="${item.heading @ context='attribute'}" 
+                                         class="hero-carousel__img" 
+                                         loading="lazy" />
+                                </sly>
+                                <sly data-sly-test="${!item.mobileImageUrl && item.desktopImageUrl}">
+                                    <img src="${item.desktopImageUrl @ context='attribute'}" 
+                                         alt="${item.heading @ context='attribute'}" 
+                                         class="hero-carousel__img" 
+                                         loading="lazy" />
+                                </sly>
+                            </div>
+                        </div>
+                        
+                        <div class="hero-carousel__content">
+                            <sly data-sly-test="${item.heading}">
+                                <h2 class="hero-carousel__heading">${item.heading @ context='html'}</h2>
+                            </sly>
+                            <sly data-sly-test="${item.description}">
+                                <p class="hero-carousel__description">${item.description @ context='html'}</p>
+                            </sly>
+                            <sly data-sly-test="${item.highlightText}">
+                                <span class="hero-carousel__highlight">${item.highlightText @ context='html'}</span>
+                            </sly>
+                            <sly data-sly-test="${item.ctaLabel && item.ctaUrl}">
+                                <a href="${item.ctaUrl @ context='attribute'}" class="hero-carousel__cta" data-analytics-event="hero-carousel-cta">
+                                    ${item.ctaLabel @ context='html'}
+                                </a>
+                            </sly>
+                            <sly data-sly-test="${item.disclaimer}">
+                                <p class="hero-carousel__disclaimer">${item.disclaimer @ context='html'}</p>
+                            </sly>
+                        </div>
+                    </section>
+                </sly>
+            </sly>
+        </div>
+        
+        <!-- Navigation Controls -->
+        <sly data-sly-test="${model.slides && model.slides.size() > 1}">
+            <div class="hero-carousel__nav" role="group" aria-label="Carousel navigation">
+                <button class="hero-carousel__button hero-carousel__button--prev" aria-label="Previous slide" title="Previous slide">
+                    <span aria-hidden="true">‹</span>
+                </button>
+                <div class="hero-carousel__dots">
+                    <sly data-sly-list="${model.slides}">
+                        <button class="hero-carousel__dot ${itemList.index == 0 ? 'is-active' : ''}" 
+                                aria-label="Go to slide ${itemList.index + 1}" 
+                                aria-pressed="${itemList.index == 0 ? 'true' : 'false'}" 
+                                data-slide="${itemList.index}">
+                            <span aria-hidden="true">${itemList.index + 1}</span>
+                        </button>
+                    </sly>
+                </div>
+                <button class="hero-carousel__button hero-carousel__button--next" aria-label="Next slide" title="Next slide">
+                    <span aria-hidden="true">›</span>
+                </button>
+            </div>
+        </sly>
+    </article>
+    
+    <script type="application/json" class="hero-carousel__config" data-sly-test="${model.autoRotate}">
+        {"autoRotateInterval": ${model.autoRotateInterval}}
+    </script>
+</div>
