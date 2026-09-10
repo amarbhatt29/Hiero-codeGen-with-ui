@@ -4,8 +4,8 @@
     xmlns:jcr="http://www.jcp.org/jcr/1.0"
     jcr:primaryType="cq:Component"
     jcr:title="Global Header"
+    jcr:description="Global site header with navigation, search, and utility links"
     sling:resourceSuperType="foundation/components/parbase"
     allowedParents="[*/parsys]"
-    componentGroup="hiero-design/.hidden">
-    <jcr:description>Global site header with navigation, search, and utility links</jcr:description>
-</jcr:root>
+    componentGroup="hiero-design/.hidden"/>
+

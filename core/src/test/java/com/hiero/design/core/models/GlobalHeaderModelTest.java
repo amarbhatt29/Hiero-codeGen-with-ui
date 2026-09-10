@@ -1,14 +1,10 @@
 package com.hiero.design.core.models;
 
-import org.apache.sling.api.SlingHttpServletRequest;
 import org.apache.sling.api.resource.Resource;
-import org.apache.sling.api.resource.ValueMap;
-import org.apache.sling.api.wrappers.ValueMapDecorator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import com.adobe.cq.testing.mock.acs.commons.wcm.properties.AcsCommonsPropertyNameConstants;
 import io.wcm.testing.mock.aem.junit5.AemContext;
 import io.wcm.testing.mock.aem.junit5.AemContextExtension;
 
@@ -36,9 +32,8 @@ class GlobalHeaderModelTest {
             "/content/test/header",
             "sling:resourceType", "hiero-design/components/header"
         );
-        SlingHttpServletRequest request = aemContext.request();
-        request.setResource(resource);
-        model = request.adaptTo(GlobalHeaderModel.class);
+        aemContext.currentResource(resource);
+        model = aemContext.request().adaptTo(GlobalHeaderModel.class);
 
         assertEquals("YES BANK", model.getLogoAltText());
         assertFalse(model.isEnableSticky());
@@ -59,9 +54,8 @@ class GlobalHeaderModelTest {
             "/content/test/header",
             properties
         );
-        SlingHttpServletRequest request = aemContext.request();
-        request.setResource(resource);
-        model = request.adaptTo(GlobalHeaderModel.class);
+        aemContext.currentResource(resource);
+        model = aemContext.request().adaptTo(GlobalHeaderModel.class);
 
         assertEquals("/content/dam/logo.png", model.getLogoPath());
         assertEquals("YES BANK Logo", model.getLogoAltText());
@@ -78,9 +72,8 @@ class GlobalHeaderModelTest {
             "/content/test/header",
             properties
         );
-        SlingHttpServletRequest request = aemContext.request();
-        request.setResource(resource);
-        model = request.adaptTo(GlobalHeaderModel.class);
+        aemContext.currentResource(resource);
+        model = aemContext.request().adaptTo(GlobalHeaderModel.class);
 
         assertTrue(model.isEnableSticky());
     }
@@ -98,9 +91,8 @@ class GlobalHeaderModelTest {
             "/content/test/header",
             properties
         );
-        SlingHttpServletRequest request = aemContext.request();
-        request.setResource(resource);
-        model = request.adaptTo(GlobalHeaderModel.class);
+        aemContext.currentResource(resource);
+        model = aemContext.request().adaptTo(GlobalHeaderModel.class);
 
         assertTrue(model.isAuthenticated());
         assertEquals("John Doe", model.getProfileName());
@@ -119,9 +111,8 @@ class GlobalHeaderModelTest {
             "/content/test/header",
             properties
         );
-        SlingHttpServletRequest request = aemContext.request();
-        request.setResource(resource);
-        model = request.adaptTo(GlobalHeaderModel.class);
+        aemContext.currentResource(resource);
+        model = aemContext.request().adaptTo(GlobalHeaderModel.class);
 
         assertFalse(model.isEnableSearch());
         assertFalse(model.isEnableMobileMenu());
@@ -137,9 +128,8 @@ class GlobalHeaderModelTest {
             "/content/test/header",
             properties
         );
-        SlingHttpServletRequest request = aemContext.request();
-        request.setResource(resource);
-        model = request.adaptTo(GlobalHeaderModel.class);
+        aemContext.currentResource(resource);
+        model = aemContext.request().adaptTo(GlobalHeaderModel.class);
 
         assertEquals("/content/components/navigation", model.getNavigationReference());
     }
@@ -154,9 +144,8 @@ class GlobalHeaderModelTest {
             "/content/test/header",
             properties
         );
-        SlingHttpServletRequest request = aemContext.request();
-        request.setResource(resource);
-        model = request.adaptTo(GlobalHeaderModel.class);
+        aemContext.currentResource(resource);
+        model = aemContext.request().adaptTo(GlobalHeaderModel.class);
 
         assertEquals("/support/help-center", model.getHelpLink());
     }
