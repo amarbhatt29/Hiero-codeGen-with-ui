@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/conf/hiero-design" mode="merge"/>
+    <filter root="/content/hiero-design" mode="merge"/>
+    <filter root="/content/dam/hiero-design" mode="merge">
+        <exclude pattern="/content/dam/hiero-design(/.*)?"/>
+        <include pattern="/content/dam/hiero-design/jcr:content(/.*)?"/>
+    </filter>
+    <filter root="/content/dam/hiero-design/asset.jpg" mode="merge"/>
+    <filter root="/content/experience-fragments/hiero-design" mode="merge"/>
+</workspaceFilter>
