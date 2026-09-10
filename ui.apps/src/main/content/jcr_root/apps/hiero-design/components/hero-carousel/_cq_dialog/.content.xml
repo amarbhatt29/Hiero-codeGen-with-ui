@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+    xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
     jcr:primaryType="nt:unstructured"
     jcr:title="Hero Carousel"
     sling:resourceType="cq/gui/components/authoring/dialog">
@@ -11,145 +15,157 @@
                 jcr:primaryType="nt:unstructured"
                 sling:resourceType="granite/ui/components/coral/foundation/tabs">
                 <items jcr:primaryType="nt:unstructured">
-                    <settings
-                        jcr:primaryType="nt:unstructured"
-                        jcr:title="Settings"
-                        sling:resourceType="granite/ui/components/coral/foundation/container">
-                        <items jcr:primaryType="nt:unstructured">
-                            <autoRotate
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                checked="{Boolean}false"
-                                name="./enableAutoRotate"
-                                text="Enable Auto-Rotation"
-                                value="true" />
-                            <autoRotateInterval
-                                jcr:primaryType="nt:unstructured"
-                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
-                                fieldLabel="Auto-Rotation Interval (ms)"
-                                name="./autoRotateInterval"
-                                value="{Long}5000" />
-                        </items>
-                    </settings>
+                    <!-- Slides Tab -->
                     <slides
                         jcr:primaryType="nt:unstructured"
-                        jcr:title="Slides"
-                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                        sling:resourceType="granite/ui/components/coral/foundation/tab"
+                        cq:showOnCreate="{Boolean}false"
+                        jcr:title="Slides">
                         <items jcr:primaryType="nt:unstructured">
                             <slides
                                 jcr:primaryType="nt:unstructured"
-                                sling:resourceType="cq/gui/components/common/cq:InplaceEditingConfig"
-                                editorType="inline"
-                                editElementQuery=".hero-carousel__content">
-                                <slides
-                                    jcr:primaryType="nt:unstructured"
-                                    sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
-                                    fieldDescription="Add slides to the carousel"
-                                    fieldLabel="Carousel Slides"
-                                    name="./slides">
-                                    <field
+                                sling:resourceType="cq/gui/components/authoring/dialog/richtext"
+                                fieldLabel="Slides"
+                                name="./slides">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <slide
                                         jcr:primaryType="nt:unstructured"
-                                        sling:resourceType="granite/ui/components/coral/foundation/container">
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/multifield"
+                                        composite="{Boolean}true"
+                                        required="{Boolean}true">
                                         <items jcr:primaryType="nt:unstructured">
-                                            <desktopImage
+                                            <items
                                                 jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
-                                                allowUpload="false"
-                                                autoStart="false"
-                                                class="cq-droptarget"
-                                                fieldLabel="Desktop Image"
-                                                fileNameParameter="./desktopImage"
-                                                mimeTypes="[image/jpeg,image/png,image/gif,image/webp]"
-                                                multiple="false"
-                                                name="./desktopImage"
-                                                required="{Boolean}true"
-                                                sizeLimit="52428800"
-                                                title="Desktop Image (1441x520px)" />
-                                            <mobileImage
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
-                                                allowUpload="false"
-                                                autoStart="false"
-                                                class="cq-droptarget"
-                                                fieldLabel="Mobile Image"
-                                                fileNameParameter="./mobileImage"
-                                                mimeTypes="[image/jpeg,image/png,image/gif,image/webp]"
-                                                multiple="false"
-                                                name="./mobileImage"
-                                                sizeLimit="52428800"
-                                                title="Mobile Image (375x670px)" />
-                                            <desktopVideo
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
-                                                allowUpload="false"
-                                                autoStart="false"
-                                                class="cq-droptarget"
-                                                fieldLabel="Desktop Video"
-                                                fileNameParameter="./desktopVideo"
-                                                mimeTypes="[video/mp4]"
-                                                multiple="false"
-                                                name="./desktopVideo"
-                                                sizeLimit="104857600"
-                                                title="Desktop Video (MP4)" />
-                                            <mobileVideo
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
-                                                allowUpload="false"
-                                                autoStart="false"
-                                                class="cq-droptarget"
-                                                fieldLabel="Mobile Video"
-                                                fileNameParameter="./mobileVideo"
-                                                mimeTypes="[video/mp4]"
-                                                multiple="false"
-                                                name="./mobileVideo"
-                                                sizeLimit="104857600"
-                                                title="Mobile Video (MP4)" />
-                                            <heading
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldLabel="Heading"
-                                                name="./heading"
-                                                required="{Boolean}false" />
-                                            <description
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
-                                                fieldLabel="Description"
-                                                name="./description"
-                                                rows="4" />
-                                            <rateHighlight
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldLabel="Rate/Highlight Text"
-                                                name="./rateHighlight" />
-                                            <ctaLabel
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
-                                                fieldLabel="CTA Label"
-                                                name="./ctaLabel" />
-                                            <ctaLink
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="cq/gui/components/authoring/dialog/pagepathrefs"
-                                                fieldLabel="CTA Link"
-                                                name="./ctaLink"
-                                                rootPath="/content" />
-                                            <ctaNewTab
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
-                                                name="./ctaNewTab"
-                                                text="Open in New Tab"
-                                                value="true" />
-                                            <disclaimer
-                                                jcr:primaryType="nt:unstructured"
-                                                sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
-                                                fieldLabel="Disclaimer/T&amp;C"
-                                                name="./disclaimer"
-                                                rows="3" />
+                                                sling:resourceType="granite/ui/components/coral/foundation/container">
+                                                <items jcr:primaryType="nt:unstructured">
+                                                    <!-- Desktop Image -->
+                                                    <desktopImage
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
+                                                        fieldLabel="Desktop Image"
+                                                        fieldDescription="Upload or select desktop hero image (recommended 1441x520px)"
+                                                        name="./desktopImage"
+                                                        required="{Boolean}true"
+                                                        mimeTypes="[image/jpeg,image/png,image/gif,image/webp]" />
+                                                    <!-- Mobile Image -->
+                                                    <mobileImage
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
+                                                        fieldLabel="Mobile Image"
+                                                        fieldDescription="Upload or select mobile hero image (recommended 375x670px). Leave empty to use desktop image."
+                                                        name="./mobileImage"
+                                                        mimeTypes="[image/jpeg,image/png,image/gif,image/webp]" />
+                                                    <!-- Video -->
+                                                    <video
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
+                                                        fieldLabel="Video"
+                                                        fieldDescription="Upload or select video file. If set, video will be used instead of images."
+                                                        name="./video"
+                                                        mimeTypes="[video/mp4,video/webm,video/ogg]" />
+                                                    <!-- Video Poster -->
+                                                    <videoPoster
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
+                                                        fieldLabel="Video Poster Image"
+                                                        fieldDescription="Image displayed while video loads"
+                                                        name="./videoPoster"
+                                                        mimeTypes="[image/jpeg,image/png,image/gif,image/webp]" />
+                                                    <!-- Alt Text -->
+                                                    <altText
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                        fieldLabel="Alt Text"
+                                                        fieldDescription="Descriptive alt text for accessibility"
+                                                        name="./altText"
+                                                        required="{Boolean}true" />
+                                                    <!-- Rate/Highlight Text -->
+                                                    <rateText
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                        fieldLabel="Rate/Highlight Text"
+                                                        fieldDescription="e.g., 4.5% APY"
+                                                        name="./rateText" />
+                                                    <!-- Heading -->
+                                                    <heading
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                        fieldLabel="Heading"
+                                                        fieldDescription="Main heading for the slide"
+                                                        name="./heading"
+                                                        required="{Boolean}true" />
+                                                    <!-- Description -->
+                                                    <description
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                        fieldLabel="Description"
+                                                        fieldDescription="Supporting description text"
+                                                        name="./description" />
+                                                    <!-- CTA Label -->
+                                                    <ctaLabel
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                                        fieldLabel="CTA Label"
+                                                        fieldDescription="Call-to-action button text"
+                                                        name="./ctaLabel" />
+                                                    <!-- CTA Link -->
+                                                    <ctaLink
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
+                                                        fieldLabel="CTA Link"
+                                                        fieldDescription="Link target for CTA button"
+                                                        name="./ctaLink" />
+                                                    <!-- Legal/T&C Text -->
+                                                    <legalText
+                                                        jcr:primaryType="nt:unstructured"
+                                                        sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                                        fieldLabel="Legal/T&C Text"
+                                                        fieldDescription="Disclaimer or terms text"
+                                                        name="./legalText" />
+                                                </items>
+                                            </items>
                                         </items>
-                                    </field>
-                                </slides>
+                                    </slide>
+                                </items>
                             </slides>
                         </items>
                     </slides>
+                    <!-- Settings Tab -->
+                    <settings
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/tab"
+                        jcr:title="Settings">
+                        <items jcr:primaryType="nt:unstructured">
+                            <!-- Auto Rotate -->
+                            <autoRotate
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldLabel="Auto-rotate Slides"
+                                name="./autoRotate"
+                                value="true"
+                                uncheckedValue="false" />
+                            <!-- Rotation Delay -->
+                            <rotationDelay
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/numberfield"
+                                fieldLabel="Rotation Delay (milliseconds)"
+                                fieldDescription="Time between slides when auto-rotating (default: 5000ms)"
+                                name="./rotationDelay"
+                                min="1000"
+                                max="30000"
+                                step="1000"
+                                value="5000" />
+                            <!-- Show Navigation -->
+                            <showNavigation
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                fieldLabel="Show Navigation Controls"
+                                name="./showNavigation"
+                                value="true"
+                                uncheckedValue="false"
+                                checked="{Boolean}true" />
+                        </items>
+                    </settings>
                 </items>
             </tabs>
         </items>

@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0"
-    jcr:primaryType="cq:EditConfig"
-    cq:layout="editbar">
-    <cq:inplaceEditing jcr:primaryType="cq:InPlaceEditingConfig" active="false"/>
-    <cq:dropTargets jcr:primaryType="nt:unstructured">
-        <slides jcr:primaryType="nt:unstructured" accept="[./slides/*]" groups="[media,paragraph]" propertyName="./slides"/>
-    </cq:dropTargets>
+<jcr:root xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    jcr:primaryType="cq:EditConfig">
+    <cq:listeners
+        jcr:primaryType="cq:EditListenersConfig"
+        aftercreate="REFRESH_PAGE"
+        afteredit="REFRESH_PAGE"
+        aftermove="REFRESH_PAGE"
+        afterdelete="REFRESH_PAGE" />
 </jcr:root>
