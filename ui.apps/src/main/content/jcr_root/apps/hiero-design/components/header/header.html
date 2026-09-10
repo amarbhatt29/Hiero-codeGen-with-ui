@@ -1,0 +1,87 @@
+<div class="header ${properties.enableSticky ? 'header--' + properties.stickyBehavior : ''}"
+     data-component-id="${wcmmode.disabled ? component.path : ''}"
+     role="banner">
+    
+    <!-- Brand / Logo Section -->
+    <div class="header__brand">
+        <sly data-sly-test="${properties.logoPath}">
+            <a class="header__logo-link" 
+               href="${properties.logoLink @ context='attribute', default='/'}"
+               aria-label="${properties.logoAlt @ context='attribute'}">
+                <img class="header__logo-image" 
+                     src="${properties.logoPath}" 
+                     alt="${properties.logoAlt @ context='attribute'}" />
+            </a>
+        </sly>
+    </div>
+    
+    <!-- Main Navigation -->
+    <nav class="header__navigation" 
+         aria-label="${properties.navigationLabel @ context='attribute', default='Main Navigation'}">
+        <button class="header__nav-toggle"
+                aria-controls="header-nav-menu"
+                aria-expanded="false"
+                aria-label="Toggle navigation menu">
+            <span class="header__nav-toggle-icon"></span>
+        </button>
+        <div class="header__nav-menu" id="header-nav-menu">
+            <sly data-sly-include="${properties.navigationPath}" />
+        </div>
+    </nav>
+    
+    <!-- Search Section -->
+    <sly data-sly-test="${properties.enableSearch}">
+        <div class="header__search">
+            <form class="header__search-form" 
+                  action="${properties.searchAction @ context='attribute'}" 
+                  method="get">
+                <input class="header__search-input" 
+                       type="search" 
+                       name="q" 
+                       placeholder="Search..."
+                       aria-label="${properties.searchLabel @ context='attribute', default='Search'}"/>
+                <button class="header__search-button" 
+                        type="submit"
+                        aria-label="${properties.searchLabel @ context='attribute', default='Search'}">
+                    <span class="header__search-icon"></span>
+                </button>
+            </form>
+        </div>
+    </sly>
+    
+    <!-- Utility Links Section -->
+    <div class="header__utilities">
+        <sly data-sly-test="${properties.languageLink}">
+            <a class="header__utility-link header__utility-link--language" 
+               href="${properties.languageLink @ context='attribute'}"
+               aria-label="${properties.languageLabel @ context='attribute', default='Select Language'}">
+                <span class="header__utility-icon header__utility-icon--language"></span>
+                <span class="header__utility-label">Language</span>
+            </a>
+        </sly>
+        
+        <sly data-sly-test="${properties.helpLink}">
+            <a class="header__utility-link header__utility-link--help" 
+               href="${properties.helpLink @ context='attribute'}"
+               aria-label="${properties.helpLabel @ context='attribute', default='Help and Support'}">
+                <span class="header__utility-icon header__utility-icon--help"></span>
+                <span class="header__utility-label">Help</span>
+            </a>
+        </sly>
+        
+        <a class="header__utility-link header__utility-link--login" 
+           href="${properties.loginLink @ context='attribute'}"
+           aria-label="${properties.loginLabel @ context='attribute', default='Login'}">
+            <span class="header__utility-icon header__utility-icon--login"></span>
+            <span class="header__utility-label">${properties.loginLabel @ context='html', default='Login'}</span>
+        </a>
+    </div>
+    
+    <!-- Profile Actions (future integration point for authenticated user actions) -->
+    <div class="header__profile" data-profile-placeholder></div>
+    
+</div>
+
+<sly data-sly-use.clientlib="com.adobe.cq.sightly.WCMUseProvider" data-sly-test="!wcmmode.disabled">
+    <sly data-sly-call="${clientlib.all @ categories='hiero-design.header'}"></sly>
+</sly>
