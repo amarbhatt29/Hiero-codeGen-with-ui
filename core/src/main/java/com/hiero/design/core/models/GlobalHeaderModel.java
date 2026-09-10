@@ -1,159 +1,115 @@
 package com.hiero.design.core.models;
 
-import com.adobe.cq.export.json.ComponentExporter;
-import com.adobe.cq.export.json.ExporterConstants;
-import com.adobe.cq.wcm.core.components.models.datalayer.ComponentData;
-import com.adobe.cq.wcm.core.components.util.AbstractComponentImpl;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.apache.sling.api.SlingHttpServletRequest;
+import org.apache.sling.api.resource.Resource;
 import org.apache.sling.api.resource.ResourceResolver;
-import org.apache.sling.models.annotations.Exporter;
-import org.apache.sling.models.annotations.ExporterOption;
+import org.apache.sling.models.annotations.Default;
 import org.apache.sling.models.annotations.Model;
-import org.apache.sling.models.annotations.injected.Self;
-import org.apache.sling.models.annotations.injected.ValueMapValue;
+import org.apache.sling.models.annotations.injectorspecific.InjectionStrategy;
+import org.apache.sling.models.annotations.injectorspecific.Self;
+import org.apache.sling.models.annotations.injectorspecific.ValueMapValue;
 
-import javax.annotation.Nonnull;
-import java.util.Optional;
+import com.adobe.cq.wcm.core.components.models.Image;
 
-@Model(
-    adaptables = {SlingHttpServletRequest.class},
-    adapters = {GlobalHeaderModel.class, ComponentExporter.class},
-    resourceType = {"hiero-design/components/header"},
-    defaultInjectionStrategy = org.apache.sling.models.annotations.DefaultInjectionStrategy.OPTIONAL
-)
-@Exporter(
-    name = ExporterConstants.SLING_MODEL_EXPORTER_NAME,
-    extensions = ExporterConstants.SLING_MODEL_EXPORTER_EXTENSION_JSON
-)
-public class GlobalHeaderModel extends AbstractComponentImpl implements ComponentExporter {
+@Model(adaptables = SlingHttpServletRequest.class, adapters = GlobalHeaderModel.class)
+public class GlobalHeaderModel {
 
     @Self
     private SlingHttpServletRequest request;
 
-    @ValueMapValue
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(values = "")
     private String logoPath;
 
-    @ValueMapValue
-    private String logoAlt;
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(values = "YES BANK")
+    private String logoAltText;
 
-    @ValueMapValue
-    private String logoLink;
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(booleanValues = false)
+    private boolean enableSticky;
 
-    @ValueMapValue
-    private String navigationPath;
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(values = "")
+    private String navigationReference;
 
-    @ValueMapValue
-    private String navigationLabel;
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(booleanValues = true)
+    private boolean enableSearch;
 
-    @ValueMapValue
-    private Boolean enableSearch;
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(booleanValues = true)
+    private boolean enableMobileMenu;
 
-    @ValueMapValue
-    private String searchAction;
-
-    @ValueMapValue
-    private String searchLabel;
-
-    @ValueMapValue
-    private String languageLink;
-
-    @ValueMapValue
-    private String languageLabel;
-
-    @ValueMapValue
-    private String helpLink;
-
-    @ValueMapValue
-    private String helpLabel;
-
-    @ValueMapValue
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(values = "/bin/login")
     private String loginLink;
 
-    @ValueMapValue
-    private String loginLabel;
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(values = "/bin/logout")
+    private String logoutLink;
 
-    @ValueMapValue
-    private Boolean enableSticky;
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(values = "/help")
+    private String helpLink;
 
-    @ValueMapValue
-    private String stickyBehavior;
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(booleanValues = false)
+    private boolean isAuthenticated;
+
+    @ValueMapValue(injectionStrategy = InjectionStrategy.OPTIONAL)
+    @Default(values = "")
+    private String profileName;
 
     public String getLogoPath() {
         return logoPath;
     }
 
-    public String getLogoAlt() {
-        return logoAlt != null ? logoAlt : "Logo";
+    public String getLogoAltText() {
+        return logoAltText != null && !logoAltText.isEmpty() ? logoAltText : "YES BANK";
     }
 
-    public String getLogoLink() {
-        return logoLink != null ? logoLink : "/";
+    public boolean isEnableSticky() {
+        return enableSticky;
     }
 
-    public String getNavigationPath() {
-        return navigationPath;
+    public String getNavigationReference() {
+        return navigationReference;
     }
 
-    public String getNavigationLabel() {
-        return navigationLabel != null ? navigationLabel : "Main Navigation";
+    public boolean isEnableSearch() {
+        return enableSearch;
     }
 
-    public Boolean isSearchEnabled() {
-        return enableSearch != null ? enableSearch : true;
-    }
-
-    public String getSearchAction() {
-        return searchAction;
-    }
-
-    public String getSearchLabel() {
-        return searchLabel != null ? searchLabel : "Search";
-    }
-
-    public String getLanguageLink() {
-        return languageLink;
-    }
-
-    public String getLanguageLabel() {
-        return languageLabel != null ? languageLabel : "Select Language";
-    }
-
-    public String getHelpLink() {
-        return helpLink;
-    }
-
-    public String getHelpLabel() {
-        return helpLabel != null ? helpLabel : "Help and Support";
+    public boolean isEnableMobileMenu() {
+        return enableMobileMenu;
     }
 
     public String getLoginLink() {
         return loginLink;
     }
 
-    public String getLoginLabel() {
-        return loginLabel != null ? loginLabel : "Login";
+    public String getLogoutLink() {
+        return logoutLink;
     }
 
-    public Boolean isStickyEnabled() {
-        return enableSticky != null ? enableSticky : false;
+    public String getHelpLink() {
+        return helpLink;
     }
 
-    public String getStickyBehavior() {
-        return stickyBehavior != null ? stickyBehavior : "sticky";
+    public boolean isAuthenticated() {
+        return isAuthenticated;
     }
 
-    @JsonIgnore
-    public boolean isValid() {
-        return logoPath != null && !logoPath.isEmpty() && 
-               navigationPath != null && !navigationPath.isEmpty() && 
-               loginLink != null && !loginLink.isEmpty();
+    public String getProfileName() {
+        return profileName;
     }
 
-    @Nonnull
-    @Override
-    public String getExportedType() {
-        return request.getResource().getResourceType();
+    public boolean hasLogoImage() {
+        return logoPath != null && !logoPath.isEmpty();
     }
 }
