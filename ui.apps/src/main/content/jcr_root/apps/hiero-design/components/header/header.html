@@ -1,0 +1,89 @@
+<header class="global-header ${properties.enableSticky ? 'global-header--sticky' : ''}" data-component="global-header" role="banner">
+  <div class="global-header__container">
+    <!-- Logo / Brand -->
+    <div class="global-header__brand">
+      <a href="/" class="global-header__logo" aria-label="${model.logoAltText}">
+        <sly data-sly-test="${model.hasLogoImage}">
+          <img class="global-header__logo-image" src="${model.logoPath}" alt="${model.logoAltText}" />
+        </sly>
+        <sly data-sly-test="${!model.hasLogoImage}">
+          <span class="global-header__logo-text">YES BANK</span>
+        </sly>
+      </a>
+    </div>
+
+    <!-- Desktop Navigation -->
+    <nav class="global-header__nav" role="navigation" aria-label="Main navigation">
+      <ul class="global-header__nav-list" data-nav-container>
+        <sly data-sly-test="${model.navigationReference}">
+          <sly data-sly-resource="${model.navigationReference}" />
+        </sly>
+      </ul>
+    </nav>
+
+    <!-- Utilities Section -->
+    <div class="global-header__utilities">
+      <!-- Search -->
+      <sly data-sly-test="${model.enableSearch}">
+        <div class="global-header__search">
+          <button class="global-header__search-toggle" type="button" aria-label="Open search" data-search-toggle>
+            <span class="icon icon-search"></span>
+          </button>
+          <form class="global-header__search-form" data-search-form role="search">
+            <label class="global-header__search-label" for="search-${wcmmode.disabled ? 'publish' : 'author'}">
+              Search
+            </label>
+            <input class="global-header__search-input" type="search" id="search-${wcmmode.disabled ? 'publish' : 'author'}" placeholder="Search" name="q" />
+            <button class="global-header__search-submit" type="submit" aria-label="Submit search">
+              <span class="icon icon-search"></span>
+            </button>
+          </form>
+        </div>
+      </sly>
+
+      <!-- Help Link -->
+      <a href="${model.helpLink}" class="global-header__utility-link" aria-label="Help">
+        <span class="icon icon-help"></span>
+      </a>
+
+      <!-- Authentication -->
+      <div class="global-header__auth">
+        <sly data-sly-test="${model.isAuthenticated && model.profileName}">
+          <div class="global-header__profile">
+            <button class="global-header__profile-toggle" type="button" data-profile-toggle aria-expanded="false" aria-label="Account menu">
+              <span class="icon icon-profile"></span>
+              <span class="global-header__profile-name">${model.profileName}</span>
+            </button>
+            <div class="global-header__profile-menu" data-profile-menu role="region" aria-label="Account options">
+              <a href="${model.logoutLink}" class="global-header__profile-link">Logout</a>
+            </div>
+          </div>
+        </sly>
+        <sly data-sly-test="${!model.isAuthenticated}">
+          <a href="${model.loginLink}" class="global-header__auth-link">
+            <span class="icon icon-login"></span>
+            <span class="global-header__auth-label">Login</span>
+          </a>
+        </sly>
+      </div>
+    </div>
+
+    <!-- Mobile Menu Toggle -->
+    <sly data-sly-test="${model.enableMobileMenu}">
+      <button class="global-header__mobile-toggle" type="button" data-mobile-toggle aria-expanded="false" aria-label="Toggle navigation menu">
+        <span class="global-header__mobile-toggle-icon"></span>
+      </button>
+    </sly>
+  </div>
+
+  <!-- Mobile Menu -->
+  <sly data-sly-test="${model.enableMobileMenu}">
+    <nav class="global-header__mobile-menu" data-mobile-menu role="navigation" aria-label="Mobile navigation" aria-hidden="true">
+      <ul class="global-header__mobile-menu-list" data-mobile-nav-container>
+        <sly data-sly-test="${model.navigationReference}">
+          <sly data-sly-resource="${model.navigationReference}" />
+        </sly>
+      </ul>
+    </nav>
+  </sly>
+</header>
