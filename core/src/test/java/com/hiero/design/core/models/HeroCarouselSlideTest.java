@@ -20,13 +20,22 @@ class HeroCarouselSlideTest {
 
     @BeforeEach
     void setUp() {
-        context.load().json("/com/hiero/design/core/models/HeroCarouselSlideTest.json", "/content");
+        context.addModelsForClasses(HeroCarouselSlide.class);
     }
 
     @Test
     void testSlideWithImage() {
-        Resource resource = context.resourceResolver().getResource("/content/slide-with-image");
-        assertNotNull(resource);
+        Resource resource = context.create().resource(
+            "/content/slide-with-image",
+            "sling:resourceType", "hiero-design/components/carousel/slide",
+            "desktopImage", "/content/dam/carousel/slide1-desktop.jpg",
+            "mobileImage", "/content/dam/carousel/slide1-mobile.jpg",
+            "heading", "Slide Heading",
+            "description", "Slide description text",
+            "ctaLabel", "Learn More",
+            "ctaLink", "/content/page",
+            "ctaTarget", "_blank"
+        );
 
         slide = resource.adaptTo(HeroCarouselSlide.class);
         assertNotNull(slide);
@@ -36,8 +45,16 @@ class HeroCarouselSlideTest {
 
     @Test
     void testSlideWithVideo() {
-        Resource resource = context.resourceResolver().getResource("/content/slide-with-video");
-        assertNotNull(resource);
+        Resource resource = context.create().resource(
+            "/content/slide-with-video",
+            "sling:resourceType", "hiero-design/components/carousel/slide",
+            "desktopVideo", "/content/dam/carousel/video.mp4",
+            "heading", "Video Slide",
+            "description", "Video slide description",
+            "ctaLabel", "Watch",
+            "ctaLink", "/content/video-page",
+            "ctaTarget", "_self"
+        );
 
         slide = resource.adaptTo(HeroCarouselSlide.class);
         assertNotNull(slide);
@@ -46,8 +63,15 @@ class HeroCarouselSlideTest {
 
     @Test
     void testSlideWithContent() {
-        Resource resource = context.resourceResolver().getResource("/content/slide-with-content");
-        assertNotNull(resource);
+        Resource resource = context.create().resource(
+            "/content/slide-with-content",
+            "sling:resourceType", "hiero-design/components/carousel/slide",
+            "heading", "Content Slide",
+            "description", "Content slide description",
+            "ctaLabel", "Click Here",
+            "ctaLink", "/content/details",
+            "ctaTarget", "_blank"
+        );
 
         slide = resource.adaptTo(HeroCarouselSlide.class);
         assertNotNull(slide);
@@ -58,7 +82,18 @@ class HeroCarouselSlideTest {
 
     @Test
     void testSlideProperties() {
-        Resource resource = context.resourceResolver().getResource("/content/slide-with-image");
+        Resource resource = context.create().resource(
+            "/content/slide-properties",
+            "sling:resourceType", "hiero-design/components/carousel/slide",
+            "desktopImage", "/content/dam/carousel/slide1-desktop.jpg",
+            "mobileImage", "/content/dam/carousel/slide1-mobile.jpg",
+            "heading", "Slide Heading",
+            "description", "Slide description text",
+            "ctaLabel", "Learn More",
+            "ctaLink", "/content/page",
+            "ctaTarget", "_blank"
+        );
+
         slide = resource.adaptTo(HeroCarouselSlide.class);
 
         assertNotNull(slide.getHeading());
@@ -70,7 +105,17 @@ class HeroCarouselSlideTest {
 
     @Test
     void testMissingMobileImage() {
-        Resource resource = context.resourceResolver().getResource("/content/slide-desktop-only");
+        Resource resource = context.create().resource(
+            "/content/slide-desktop-only",
+            "sling:resourceType", "hiero-design/components/carousel/slide",
+            "desktopImage", "/content/dam/carousel/desktop-only.jpg",
+            "heading", "Desktop Only Slide",
+            "description", "Desktop only slide description",
+            "ctaLabel", "View",
+            "ctaLink", "/content/desktop",
+            "ctaTarget", "_self"
+        );
+
         slide = resource.adaptTo(HeroCarouselSlide.class);
 
         assertNotNull(slide.getDesktopImage());
