@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+    xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    xmlns:jcr="http://www.jcp.org/jcr/1.0"
+    xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="cq:Dialog"
+    title="Global Header"
+    helpPath="en/cq/using/page_authoring.html#inserting_a_component_from_the_sidekick">
+    <content jcr:primaryType="nt:unstructured">
+        <items jcr:primaryType="cq:WidgetCollection">
+            <tabs jcr:primaryType="cq:TabPanel">
+                <items jcr:primaryType="cq:WidgetCollection">
+                    <!-- Brand Tab -->
+                    <brand jcr:primaryType="cq:Panel" title="Brand">
+                        <items jcr:primaryType="cq:WidgetCollection">
+                            <logo
+                                jcr:primaryType="cq:Widget"
+                                xtype="pathfield"
+                                fieldLabel="Logo/Brand Asset"
+                                name="./logoPath"
+                                rootPath="/content/dam"
+                                help="Select the brand logo from DAM" />
+                            <logoAltText
+                                jcr:primaryType="cq:Widget"
+                                xtype="textfield"
+                                fieldLabel="Logo Alternative Text"
+                                name="./logoAltText"
+                                value="YES BANK"
+                                help="Accessible alt text for logo image" />
+                        </items>
+                    </brand>
+                    <!-- Navigation Tab -->
+                    <navigation jcr:primaryType="cq:Panel" title="Navigation">
+                        <items jcr:primaryType="cq:WidgetCollection">
+                            <navigationReference
+                                jcr:primaryType="cq:Widget"
+                                xtype="pathfield"
+                                fieldLabel="Navigation Component Reference"
+                                name="./navigationReference"
+                                rootPath="/content"
+                                help="Reference to the primary navigation component" />
+                        </items>
+                    </navigation>
+                    <!-- Utilities Tab -->
+                    <utilities jcr:primaryType="cq:Panel" title="Utilities">
+                        <items jcr:primaryType="cq:WidgetCollection">
+                            <enableSearch
+                                jcr:primaryType="cq:Widget"
+                                xtype="checkbox"
+                                fieldLabel="Enable Search"
+                                name="./enableSearch"
+                                checked="true" />
+                            <helpLink
+                                jcr:primaryType="cq:Widget"
+                                xtype="textfield"
+                                fieldLabel="Help Link URL"
+                                name="./helpLink"
+                                value="/help"
+                                help="URL for help link" />
+                            <enableMobileMenu
+                                jcr:primaryType="cq:Widget"
+                                xtype="checkbox"
+                                fieldLabel="Enable Mobile Menu"
+                                name="./enableMobileMenu"
+                                checked="true" />
+                        </items>
+                    </utilities>
+                    <!-- Authentication Tab -->
+                    <authentication jcr:primaryType="cq:Panel" title="Authentication">
+                        <items jcr:primaryType="cq:WidgetCollection">
+                            <isAuthenticated
+                                jcr:primaryType="cq:Widget"
+                                xtype="checkbox"
+                                fieldLabel="Authenticated State (Testing)"
+                                name="./isAuthenticated"
+                                help="For preview purposes. Production state determined by integration." />
+                            <profileName
+                                jcr:primaryType="cq:Widget"
+                                xtype="textfield"
+                                fieldLabel="Profile Name (Testing)"
+                                name="./profileName"
+                                help="Displayed when authenticated. Production value from integration." />
+                            <loginLink
+                                jcr:primaryType="cq:Widget"
+                                xtype="textfield"
+                                fieldLabel="Login Link URL"
+                                name="./loginLink"
+                                value="/bin/login" />
+                            <logoutLink
+                                jcr:primaryType="cq:Widget"
+                                xtype="textfield"
+                                fieldLabel="Logout Link URL"
+                                name="./logoutLink"
+                                value="/bin/logout" />
+                        </items>
+                    </authentication>
+                    <!-- Behavior Tab -->
+                    <behavior jcr:primaryType="cq:Panel" title="Behavior">
+                        <items jcr:primaryType="cq:WidgetCollection">
+                            <enableSticky
+                                jcr:primaryType="cq:Widget"
+                                xtype="checkbox"
+                                fieldLabel="Enable Sticky Header"
+                                name="./enableSticky"
+                                help="Header remains visible on scroll. Only enable where design requires." />
+                        </items>
+                    </behavior>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>
