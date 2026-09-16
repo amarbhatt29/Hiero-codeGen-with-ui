@@ -104,7 +104,9 @@ class HeroCarousel {
   }
 
   updateSlidePosition() {
-    if (this.isTransitioning) return;
+    if (this.isTransitioning) {
+      return;
+    }
 
     this.isTransitioning = true;
     const offset = -this.currentIndex * 100;

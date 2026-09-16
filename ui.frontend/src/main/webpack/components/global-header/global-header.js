@@ -91,7 +91,9 @@
     }
 
     setMobileMenuState(isOpen) {
-      if (!this.mobileToggle || !this.mobileMenu) return;
+      if (!this.mobileToggle || !this.mobileMenu) {
+        return;
+      }
 
       this.mobileToggle.setAttribute('aria-expanded', isOpen);
       this.mobileMenu.setAttribute('aria-hidden', !isOpen);
@@ -109,17 +111,23 @@
 
     toggleSearch(e) {
       e.stopPropagation();
-      if (!this.searchForm) return;
+      if (!this.searchForm) {
+        return;
+      }
       this.searchForm.classList.toggle(CLASS_NAMES.isActive);
       if (this.searchForm.classList.contains(CLASS_NAMES.isActive)) {
         const input = this.searchForm.querySelector('input[type="search"]');
-        if (input) input.focus();
+        if (input) {
+          input.focus();
+        }
       }
     }
 
     toggleProfile(e) {
       e.stopPropagation();
-      if (!this.profileMenu) return;
+      if (!this.profileMenu) {
+        return;
+      }
       this.profileMenu.classList.toggle(CLASS_NAMES.isOpen);
     }
 
