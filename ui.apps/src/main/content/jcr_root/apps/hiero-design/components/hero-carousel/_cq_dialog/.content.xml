@@ -23,8 +23,7 @@
                                 layout="fixed"
                                 name="./slides"
                                 add="Add Slide"
-                                delete="Delete"
-                                columns="{name: 'heading', text: 'Heading'}">
+                                delete="Delete">
                                 <items jcr:primaryType="nt:unstructured">
                                     <slideOrder
                                         jcr:primaryType="nt:unstructured"
@@ -93,7 +92,7 @@
                                         jcr:primaryType="nt:unstructured"
                                         sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
                                         name="./legalCopy"
-                                        fieldLabel="Legal/T&C Copy"/>
+                                        fieldLabel="Legal/T&amp;C Copy"/>
                                 </items>
                             </slides-container>
                         </items>

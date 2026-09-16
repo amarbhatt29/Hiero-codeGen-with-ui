@@ -1,16 +1,16 @@
-<div class="hero-carousel" 
+<div class="hero-carousel"
      data-hero-carousel
      data-autoplay="${model.autoplayEnabled}"
      data-autoplay-interval="${model.autoplayInterval}"
-     data-slides-count="${model.slides.size()}">
+     data-slides-count="${model.slides ? model.slides.size : 0}">
 
   <div class="hero-carousel__track" role="region" aria-label="Hero carousel">
     <div class="hero-carousel__slides">
       <sly data-sly-list.slide="${model.slides}">
-        <article class="hero-carousel__slide" 
-                 role="group" 
+        <article class="hero-carousel__slide"
+                 role="group"
                  aria-roledescription="slide"
-                 aria-label="Slide ${slideList.index + 1} of ${slideList.count}"
+                 aria-label="Slide"
                  tabindex="${slideList.first ? 0 : -1}">
           
           <div class="hero-carousel__media">
@@ -76,7 +76,7 @@
     </div>
   </div>
   
-  <sly data-sly-test="${model.isShowNavigation() && model.slides.size() > 1}">
+  <sly data-sly-test="${model.isShowNavigation && model.slides.size > 1}">
     <div class="hero-carousel__controls" role="group" aria-label="Carousel controls">
       <button class="hero-carousel__nav hero-carousel__nav--prev" 
               type="button" 
@@ -94,14 +94,14 @@
     
     <div class="hero-carousel__indicators" role="tablist" aria-label="Slide indicators">
       <sly data-sly-list.indicator="${model.slides}">
-        <button class="hero-carousel__indicator" 
-                type="button" 
+        <button class="hero-carousel__indicator"
+                type="button"
                 role="tab"
                 aria-selected="${indicatorList.first}"
-                aria-label="Slide ${indicatorList.index + 1}"
+                aria-label="Slide"
                 data-slide-index="${indicatorList.index}"
                 tabindex="${indicatorList.first ? 0 : -1}">
-          <span class="sr-only">Slide ${indicatorList.index + 1}</span>
+          <span class="sr-only">Slide</span>
         </button>
       </sly>
     </div>
