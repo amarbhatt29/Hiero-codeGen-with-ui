@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<jcr:root xmlns:sling='http://sling.apache.org/jcr/sling/1.0'
+    xmlns:cq='http://www.day.com/jcr/cq/1.0'
+    xmlns:jcr='http://www.jcp.org/jcr/1.0'
+    xmlns:nt='http://www.jcp.org/jcr/nt/1.0'
+    jcr:primaryType='nt:unstructured'
+    jcr:title='Get in Touch'
+    sling:resourceType='cq/gui/components/authoring/dialog'>
+    <content
+        jcr:primaryType='nt:unstructured'
+        sling:resourceType='granite/ui/components/coral/foundation/container'>
+        <items jcr:primaryType='nt:unstructured'>
+            <tabs
+                jcr:primaryType='nt:unstructured'
+                sling:resourceType='granite/ui/components/coral/foundation/tabs'
+                maximized='{Boolean}true'>
+                <items jcr:primaryType='nt:unstructured'>
+                    <general
+                        jcr:primaryType='nt:unstructured'
+                        jcr:title='General'
+                        sling:resourceType='granite/ui/components/coral/foundation/container'
+                        margin='{Boolean}true'>
+                        <items jcr:primaryType='nt:unstructured'>
+                            <columns
+                                jcr:primaryType='nt:unstructured'
+                                sling:resourceType='granite/ui/components/coral/foundation/fixedcolumns'>
+                                <items jcr:primaryType='nt:unstructured'>
+                                    <locatorColumn
+                                        jcr:primaryType='nt:unstructured'
+                                        sling:resourceType='granite/ui/components/coral/foundation/container'>
+                                        <items jcr:primaryType='nt:unstructured'>
+                                            <heading
+                                                jcr:primaryType='nt:unstructured'
+                                                sling:resourceType='granite/ui/components/coral/foundation/form/textfield'
+                                                fieldLabel='Section Heading'
+                                                name='./heading'/>
+                                            <locatorTitle
+                                                jcr:primaryType='nt:unstructured'
+                                                sling:resourceType='granite/ui/components/coral/foundation/form/textfield'
+                                                fieldLabel='Locator Title'
+                                                name='./locatorTitle'/>
+                                            <locatorDescription
+                                                jcr:primaryType='nt:unstructured'
+                                                sling:resourceType='granite/ui/components/coral/foundation/form/textarea'
+                                                fieldLabel='Locator Description'
+                                                name='./locatorDescription'/>
+                                            <locatorImageReference
+                                                jcr:primaryType='nt:unstructured'
+                                                sling:resourceType='granite/ui/components/coral/foundation/form/fileupload'
+                                                fieldLabel='Locator Image'
+                                                fileNameParameter='./locatorImageReference@FileName'
+                                                fileReferenceParameter='./locatorImageReference'
+                                                mimeTypes='[image]'
+                                                name='./locatorImageReference'/>
+                                            <locatorImageAlt
+                                                jcr:primaryType='nt:unstructured'
+                                                sling:resourceType='granite/ui/components/coral/foundation/form/textfield'
+                                                fieldLabel='Locator Image Alt Text'
+                                                fieldDescription='Leave empty only if the image is purely decorative.'
+                                                name='./locatorImageAlt'/>
+                                            <locatorCtaLabel
+                                                jcr:primaryType='nt:unstructured'
+                                                sling:resourceType='granite/ui/components/coral/foundation/form/textfield'
+                                                fieldLabel='Locator CTA Label'
+                                                name='./locatorCtaLabel'/>
+                                            <locatorCtaLink
+                                                jcr:primaryType='nt:unstructured'
+                                                sling:resourceType='granite/ui/components/coral/foundation/form/pathbrowser'
+                                                fieldLabel='Locator CTA Link'
+                                                rootPath='/content'
+                                                name='./locatorCtaLink'/>
+                                            <statistics
+                                                jcr:primaryType='nt:unstructured'
+                                                sling:resourceType='granite/ui/components/coral/foundation/form/multifield'
+                                                fieldLabel='Locator Statistics'
+                                                fieldDescription='e.g. 500+ Branches, 1200+ ATMs'
+                                                composite='{Boolean}true'>
+                                                <field
+                                                    jcr:primaryType='nt:unstructured'
+                                                    sling:resourceType='granite/ui/components/coral/foundation/container'
+                                                    name='./statistics'>
+                                                    <items jcr:primaryType='nt:unstructured'>
+                                                        <value
+                                                            jcr:primaryType='nt:unstructured'
+                                                            sling:resourceType='granite/ui/components/coral/foundation/form/textfield'
+                                                            fieldLabel='Statistic Value'
+                                                            name='./value'/>
+                                                        <label
+                                                            jcr:primaryType='nt:unstructured'
+                                                            sling:resourceType='granite/ui/components/coral/foundation/form/textfield'
+                                                            fieldLabel='Statistic Label'
+                                                            name='./label'/>
+                                                    </items>
+                                                </field>
+                                            </statistics>
+                                        </items>
+                                    </locatorColumn>
+                                    <contactColumn
+                                        jcr:primaryType='nt:unstructured'
+                                        sling:resourceType='granite/ui/components/coral/foundation/container'>
+                                        <items jcr:primaryType='nt:unstructured'>
+                                            <phoneNumbers
+                                                jcr:primaryType='nt:unstructured'
+                                                sling:resourceType='granite/ui/components/coral/foundation/form/multifield'
+                                                fieldLabel='Phone Numbers'
+                                                fieldDescription='Add one or more support numbers.'
+                                                composite='{Boolean}true'>
+                                                <field
+                                                    jcr:primaryType='nt:unstructured'
+                                                    sling:resourceType='granite/ui/components/coral/foundation/container'
+                                                    name='./phoneNumbers'>
+                                                    <items jcr:primaryType='nt:unstructured'>
+                                                        <label
+                                                            jcr:primaryType='nt:unstructured'
+                                                            sling:resourceType='granite/ui/components/coral/foundation/form/textfield'
+                                                            fieldLabel='Phone Label'
+                                                            name='./label'/>
+                                                        <number
+                                                            jcr:primaryType='nt:unstructured'
+                                                            sling:resourceType='granite/ui/components/coral/foundation/form/textfield'
+                                                            fieldLabel='Phone Number'
+                                                            name='./number'/>
+                                                    </items>
+                                                </field>
+                                            </phoneNumbers>
+                                            <email
+                                                jcr:primaryType='nt:unstructured'
+                                                sling:resourceType='granite/ui/components/coral/foundation/form/textfield'
+                                                fieldLabel='Email Address'
+                                                name='./email'/>
+                                            <contactCtaLabel
+                                                jcr:primaryType='nt:unstructured'
+                                                sling:resourceType='granite/ui/components/coral/foundation/form/textfield'
+                                                fieldLabel='Contact CTA Label'
+                                                name='./contactCtaLabel'/>
+                                            <contactCtaLink
+                                                jcr:primaryType='nt:unstructured'
+                                                sling:resourceType='granite/ui/components/coral/foundation/form/pathbrowser'
+                                                fieldLabel='Contact CTA Link'
+                                                rootPath='/content'
+                                                name='./contactCtaLink'/>
+                                        </items>
+                                    </contactColumn>
+                                </items>
+                            </columns>
+                        </items>
+                    </general>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>
