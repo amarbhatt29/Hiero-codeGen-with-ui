@@ -1,0 +1,128 @@
+.cmp-getintouch {
+    --cmp-getintouch-gap: 2rem;
+    --cmp-getintouch-primary: #00263e;
+}
+
+.cmp-getintouch__container {
+    padding: 2rem 1rem;
+}
+
+.cmp-getintouch__heading {
+    margin: 0 0 1.5rem;
+    font-size: 1.75rem;
+}
+
+.cmp-getintouch__grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cmp-getintouch-gap);
+}
+
+.cmp-getintouch__locator,
+.cmp-getintouch__contact {
+    flex: 1 1 0;
+}
+
+.cmp-getintouch__locator-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.cmp-getintouch__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    list-style: none;
+    margin: 1rem 0;
+    padding: 0;
+}
+
+.cmp-getintouch__stat {
+    display: flex;
+    flex-direction: column;
+}
+
+.cmp-getintouch__stat-value {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.cmp-getintouch__phones {
+    list-style: none;
+    margin: 0 0 1rem;
+    padding: 0;
+}
+
+.cmp-getintouch__phone,
+.cmp-getintouch__email {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.cmp-getintouch__cta,
+.cmp-getintouch__phone-link,
+.cmp-getintouch__email-link,
+.cmp-getintouch__copy {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.cmp-getintouch__cta {
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.cmp-getintouch__cta--locator {
+    background: var(--cmp-getintouch-primary);
+    color: #fff;
+}
+
+.cmp-getintouch__cta--contact {
+    background: transparent;
+    border: 2px solid var(--cmp-getintouch-primary);
+    color: var(--cmp-getintouch-primary);
+}
+
+.cmp-getintouch__copy {
+    padding: 0.5rem 1rem;
+    border: 1px solid currentColor;
+    background: transparent;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cmp-getintouch__copy[hidden] {
+    display: none;
+}
+
+.cmp-getintouch__copy:focus-visible,
+.cmp-getintouch__cta:focus-visible,
+.cmp-getintouch__phone-link:focus-visible,
+.cmp-getintouch__email-link:focus-visible {
+    outline: 2px solid #005fcc;
+    outline-offset: 2px;
+}
+
+.cmp-getintouch__copy-status {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+    .cmp-getintouch__grid {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}

@@ -1,0 +1,69 @@
+<div data-sly-use.model="com.hiero.design.core.models.GetInTouchModel"
+     data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     class="cmp-getintouch">
+    <sly data-sly-call="${templates.placeholder @ isEmpty = !(model.heading || model.locatorTitle || model.emailPresent || model.phoneNumbersPresent || model.locatorCtaPresent || model.contactCtaPresent)}"></sly>
+
+    <section class="cmp-getintouch__container">
+        <h2 data-sly-test="${model.heading}" id="${model.id}-heading" class="cmp-getintouch__heading">${model.heading}</h2>
+
+        <div class="cmp-getintouch__grid">
+
+            <div class="cmp-getintouch__locator" data-sly-test="${model.locatorTitle || model.locatorDescription || model.statisticsPresent || model.locatorCtaPresent}">
+                <img data-sly-test="${model.locatorImagePresent}"
+                     src="${model.locatorImageReference}"
+                     alt="${model.locatorImageAlt}"
+                     class="cmp-getintouch__locator-image"/>
+                <h3 data-sly-test="${model.locatorTitle}" class="cmp-getintouch__locator-title">${model.locatorTitle}</h3>
+                <p data-sly-test="${model.locatorDescription}" class="cmp-getintouch__locator-description">${model.locatorDescription}</p>
+
+                <ul data-sly-test="${model.statisticsPresent}" class="cmp-getintouch__stats" data-sly-list.stat="${model.statistics}">
+                    <li data-sly-test="${stat.present}" class="cmp-getintouch__stat">
+                        <span class="cmp-getintouch__stat-value">${stat.value}</span>
+                        <span class="cmp-getintouch__stat-label">${stat.label}</span>
+                    </li>
+                </ul>
+
+                <a data-sly-test="${model.locatorCtaPresent}"
+                   href="${model.locatorCtaLink}"
+                   class="cmp-getintouch__cta cmp-getintouch__cta--locator"
+                   data-cmp-analytics="getintouch-locator-cta">${model.locatorCtaLabel}</a>
+            </div>
+
+            <div class="cmp-getintouch__contact" data-sly-test="${model.contactDetailsPresent}">
+                <ul data-sly-test="${model.phoneNumbersPresent}" class="cmp-getintouch__phones" data-sly-list.phone="${model.phoneNumbers}">
+                    <li data-sly-test="${phone.present}" class="cmp-getintouch__phone">
+                        <span data-sly-test="${phone.label}" class="cmp-getintouch__phone-label">${phone.label}</span>
+                        <a href="${phone.telHref}" class="cmp-getintouch__phone-link" data-cmp-analytics="getintouch-tel-cta">${phone.number}</a>
+                        <button type="button"
+                                class="cmp-getintouch__copy"
+                                data-copy-value="${phone.number}"
+                                data-copy-label="Copy"
+                                data-copied-label="Copied"
+                                aria-label="Copy phone number ${phone.number}">Copy</button>
+                    </li>
+                </ul>
+
+                <div data-sly-test="${model.emailPresent}" class="cmp-getintouch__email">
+                    <a href="mailto:${model.email}" class="cmp-getintouch__email-link" data-cmp-analytics="getintouch-email-cta">${model.email}</a>
+                    <button type="button"
+                            class="cmp-getintouch__copy"
+                            data-copy-value="${model.email}"
+                            data-copy-label="Copy"
+                            data-copied-label="Copied"
+                            aria-label="Copy email address ${model.email}">Copy</button>
+                </div>
+
+                <a data-sly-test="${model.contactCtaPresent}"
+                   href="${model.contactCtaLink}"
+                   class="cmp-getintouch__cta cmp-getintouch__cta--contact"
+                   data-cmp-analytics="getintouch-contact-cta">${model.contactCtaLabel}</a>
+            </div>
+
+        </div>
+    </section>
+
+    <span class="cmp-getintouch__copy-status" role="status" aria-live="polite" data-copy-status></span>
+</div>
+
+<sly data-sly-call="${clientLib.js @ categories='hiero-design.getintouch'}" data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"></sly>
+<sly data-sly-call="${clientLib.css @ categories='hiero-design.getintouch'}" data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html"></sly>
