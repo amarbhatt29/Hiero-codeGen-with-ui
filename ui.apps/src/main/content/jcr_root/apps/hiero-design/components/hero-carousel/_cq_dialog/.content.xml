@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:sling="http://sling.apache.org/jcr/sling/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    jcr:primaryType="nt:unstructured"
+    jcr:title="Hero Carousel"
+    sling:resourceType="cq/gui/components/authoring/dialog">
+    <content
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="granite/ui/components/coral/foundation/container">
+        <items jcr:primaryType="nt:unstructured">
+            <tabs
+                jcr:primaryType="nt:unstructured"
+                sling:resourceType="granite/ui/components/coral/foundation/tabs">
+                <items jcr:primaryType="nt:unstructured">
+                    <slides
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        jcr:title="Slides">
+                        <items jcr:primaryType="nt:unstructured">
+                            <slides-container
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="cq/gui/components/authoring/dialog/tablepanel"
+                                fieldLabel="Carousel Slides"
+                                layout="fixed"
+                                name="./slides"
+                                add="Add Slide"
+                                delete="Delete">
+                                <items jcr:primaryType="nt:unstructured">
+                                    <slideOrder
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/number"
+                                        name="./slideOrder"
+                                        fieldLabel="Order"/>
+                                    <desktopImage
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
+                                        name="./desktopImage"
+                                        fieldLabel="Desktop Image (1441x520)"
+                                        mimeTypes="[image]"/>
+                                    <mobileImage
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
+                                        name="./mobileImage"
+                                        fieldLabel="Mobile Image (375x670)"/>
+                                    <desktopVideo
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
+                                        name="./desktopVideo"
+                                        fieldLabel="Desktop Video"
+                                        mimeTypes="[video]"/>
+                                    <mobileVideo
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="cq/gui/components/authoring/dialog/fileupload"
+                                        name="./mobileVideo"
+                                        fieldLabel="Mobile Video"
+                                        mimeTypes="[video]"/>
+                                    <heading
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                        name="./heading"
+                                        fieldLabel="Heading"/>
+                                    <description
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                        name="./description"
+                                        fieldLabel="Description"/>
+                                    <rateHighlight
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                        name="./rateHighlight"
+                                        fieldLabel="Rate/Highlight Text"/>
+                                    <ctaLabel
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+                                        name="./ctaLabel"
+                                        fieldLabel="CTA Label"/>
+                                    <ctaLink
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="cq/gui/components/authoring/dialog/pageref"
+                                        name="./ctaLink"
+                                        fieldLabel="CTA Link"/>
+                                    <ctaTarget
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/select"
+                                        name="./ctaTarget"
+                                        fieldLabel="Open in new tab">
+                                        <items jcr:primaryType="nt:unstructured">
+                                            <self jcr:primaryType="nt:unstructured" text="Same tab" value="_self"/>
+                                            <blank jcr:primaryType="nt:unstructured" text="New tab" value="_blank"/>
+                                        </items>
+                                    </ctaTarget>
+                                    <legalCopy
+                                        jcr:primaryType="nt:unstructured"
+                                        sling:resourceType="granite/ui/components/coral/foundation/form/textarea"
+                                        name="./legalCopy"
+                                        fieldLabel="Legal/T&amp;C Copy"/>
+                                </items>
+                            </slides-container>
+                        </items>
+                    </slides>
+                    <settings
+                        jcr:primaryType="nt:unstructured"
+                        sling:resourceType="granite/ui/components/coral/foundation/container"
+                        jcr:title="Settings">
+                        <items jcr:primaryType="nt:unstructured">
+                            <autoplayEnabled
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                name="./autoplayEnabled"
+                                text="Enable autoplay"
+                                value="true"/>
+                            <autoplayInterval
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/number"
+                                name="./autoplayInterval"
+                                fieldLabel="Autoplay Interval (ms)"
+                                value="5000"/>
+                            <showNavigation
+                                jcr:primaryType="nt:unstructured"
+                                sling:resourceType="granite/ui/components/coral/foundation/form/checkbox"
+                                name="./showNavigation"
+                                text="Show navigation controls"
+                                value="true"
+                                checked="true"/>
+                        </items>
+                    </settings>
+                </items>
+            </tabs>
+        </items>
+    </content>
+</jcr:root>

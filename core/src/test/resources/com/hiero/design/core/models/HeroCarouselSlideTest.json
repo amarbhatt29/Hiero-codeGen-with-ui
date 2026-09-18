@@ -1,0 +1,54 @@
+{
+  "slide-with-image": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent",
+      "sling:resourceType": "hiero-design/components/carousel/slide",
+      "desktopImage": "/content/dam/carousel/slide1-desktop.jpg",
+      "mobileImage": "/content/dam/carousel/slide1-mobile.jpg",
+      "heading": "Slide Heading",
+      "description": "Slide description text",
+      "ctaLabel": "Learn More",
+      "ctaLink": "/content/page",
+      "ctaTarget": "_blank"
+    }
+  },
+  "slide-with-video": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent",
+      "sling:resourceType": "hiero-design/components/carousel/slide",
+      "desktopVideo": "/content/dam/carousel/video.mp4",
+      "heading": "Video Slide",
+      "description": "Video slide description",
+      "ctaLabel": "Watch",
+      "ctaLink": "/content/video-page",
+      "ctaTarget": "_self"
+    }
+  },
+  "slide-with-content": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent",
+      "sling:resourceType": "hiero-design/components/carousel/slide",
+      "heading": "Content Slide",
+      "description": "Content slide description",
+      "ctaLabel": "Click Here",
+      "ctaLink": "/content/details",
+      "ctaTarget": "_blank"
+    }
+  },
+  "slide-desktop-only": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent",
+      "sling:resourceType": "hiero-design/components/carousel/slide",
+      "desktopImage": "/content/dam/carousel/desktop-only.jpg",
+      "heading": "Desktop Only Slide",
+      "description": "Desktop only slide description",
+      "ctaLabel": "View",
+      "ctaLink": "/content/desktop",
+      "ctaTarget": "_self"
+    }
+  }
+}

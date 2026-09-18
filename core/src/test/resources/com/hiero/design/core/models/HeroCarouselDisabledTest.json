@@ -1,0 +1,21 @@
+{
+  "hero-carousel-disabled": {
+    "jcr:primaryType": "cq:Page",
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent",
+      "sling:resourceType": "hiero-design/components/carousel",
+      "autoplayEnabled": "false",
+      "autoplayInterval": "5000",
+      "showNavigation": "true",
+      "slides": {
+        "jcr:primaryType": "nt:unstructured",
+        "slide1": {
+          "jcr:primaryType": "nt:unstructured",
+          "desktopImage": "/content/dam/carousel/slide1.jpg",
+          "heading": "Slide 1",
+          "description": "First slide"
+        }
+      }
+    }
+  }
+}
